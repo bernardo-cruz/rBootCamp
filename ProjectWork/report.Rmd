@@ -1,30 +1,81 @@
 ---
 title: "R-Bootcamp report"
 author: "Bernardo Freire Barboza da Cruz & Leonid Gavrilyuk"
-date: "1/31/2022"
-output: pdf_document
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+    pdf_document:
+        fig_caption: yes
+        highlight: pygments
+        keep_tex: yes
+        number_sections: yes
+        toc: yes
+        fig_width: 16
+        fig_height: 9
+        df_print: kable
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+\pagebreak
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Introduction
+Describe the use case....
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Which is the most activate Kreis?
+## TBD
+## TBD
 
-```{r cars}
-summary(cars)
+# Extract and Transform
+## Data Import
+The data is imported from _[Stadt Zürich Open Data](https://data.stadt-zuerich.ch/)_. 
+```{r import data, echo = FALSE}
+StadtkreisStimmenAnteilPartei <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_stimmant_seit1913_od7000/download/POL700OD7000.csv'
+)
+
+bevMonatBestandQuartierGeschlHerkunft <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/bev_monat_bestand_quartier_geschl_ag_herkunft_od3250/download/BEV325OD3250.csv'
+)
+
+wahlNachAlterGeschlechtJahr <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/politik_kantonsratswahlen_btg_urnengang_alter_geschl_od7029/download/POL702OD7029.csv'
+)
+
+GemeinratBtgUrnergangQuartier <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_btg_urnengang_quartier_od7005/download/POL700OD7005.csv'
+)
+
 ```
 
-## Including Plots
+The data looks as follows:
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, echo = FALSE}
+head(StadtkreisStimmenAnteilPartei)
+head(bevMonatBestandQuartierGeschlHerkunft)
+head(wahlNachAlterGeschlechtJahr)
+head(GemeinratBtgUrnergangQuartier)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+and the column types look as follows:
+
+```{r, echo = FALSE}
+str(StadtkreisStimmenAnteilPartei)
+str(bevMonatBestandQuartierGeschlHerkunft)
+str(wahlNachAlterGeschlechtJahr)
+str(GemeinratBtgUrnergangQuartier)
+```
+
+## Data Exploration
+
+## Merging Data
+
+## Data Visualization
+
+## Fit Model
+
+## Chapter of Choice TBD
+
+# References
+
+

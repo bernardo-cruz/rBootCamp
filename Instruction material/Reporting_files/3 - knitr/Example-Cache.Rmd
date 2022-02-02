@@ -1,0 +1,45 @@
+---
+title: "Example Cache"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+cache <- TRUE
+fig.cache <- TRUE
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Example of cache
+
+This chunk is called "Chunk-1". 
+
+```{r Chunk-1, cache = cache}
+sub.tmp <- cars[1:20, ]
+```
+
+
+\bigskip
+
+The chunk option is set to *cache = TRUE*. 
+
+```{r Chunk-2, cache = fig.cache}
+plot(sub.tmp)
+```
+
+
+
+\bigskip
+
+The chunk option is set to *cache = TRUE, dependson = "Chunk-1"*. 
+
+```{r Chunk-3, cache = fig.cache, dependson="Chunk-1"}
+plot(sub.tmp)
+```
+
+

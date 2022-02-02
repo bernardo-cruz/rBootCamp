@@ -1,10 +1,9 @@
 ###############################################
 ###############################################
 ## Reshaping data sets ##
-setwd("~/HSLU_MBP/3_semester/RB01_R_Bootcamp/rBootCamp/InstructionMaterial")
 
 ## Wide-format ##
-d.sports <- read.table(file = "./R_Bootcamp_Feb2022/DataSets/Sports_Results_En.txt")
+d.sports <- read.table(file = "../DataSets/Sports_Results_En.txt")
 d.sports
 ## each row contains several observations 
 ## this data set is said to be in "wide-format"
@@ -226,7 +225,7 @@ iris %>%
   count()
 
 iris %>% 
-  filter(Petal.Length > 5 | Sepal.Length <= 6) %>% # and is by comma, or one uses pipe |
+  filter(Petal.Length > 5 | Sepal.Length <= 6) %>% 
   group_by(Species, .drop = FALSE) %>% 
   summarise(N = n())
 

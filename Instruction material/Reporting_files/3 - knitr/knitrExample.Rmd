@@ -1,0 +1,196 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  html_document: default
+editor_options:
+  chunk_output_type: inline
+---
+
+
+
+
+```{r }
+x <- sqrt(2)
+```
+
+The value of x is `r round(x, 4)` and displayed here.
+
+
+
+
+
+```{r SANDBOX, eval = FALSE, echo = FALSE}
+# Develop your
+# R code
+# here
+```
+
+
+
+
+
+```{r knitr-setup, include = FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE, include = FALSE)
+```
+
+```{r R-setup}
+##  More settings and "global variables".
+rnd <- 2   ##  Number of decimals to round.
+```
+
+
+
+
+
+```{r Kable, include = TRUE}
+iris$noise <- rnorm(n = nrow(iris))
+kable(iris[1:10, -5])
+```
+
+
+
+
+
+With a caption:
+
+```{r Kable2, include = TRUE}
+kable(iris[1:10, -5], digits = 4,
+      align = c("llccr"),
+      caption = "Tab. 1: First 10 observations
+                 in the famous iris data set.")
+```
+
+
+
+
+
+```{r FlexTable}
+library(flextable)
+
+##  Create table, and indicate column names to be included
+##  with the argument col_keys (nothing is printed yet).
+rt <- regulartable(head(mtcars), col_keys = 
+                   c("hp", "wt", "gear", "mpg"))
+```
+
+
+
+
+
+Flextable:
+
+```{r FlexTable2, include = TRUE}
+##  Give columns proper names in the table.
+rt <- set_header_labels(rt, hp = "Horsepower",
+                        wt = "Weight",
+                        gear = "No. of Gears",
+                        mpg = "Miles/Gallon")
+
+##  Make header bold and outcome italic.
+rt <- bold(rt, part = "header")
+rt <- italic(rt, j = 4)   ##  Make column 4 italic.
+
+##  Adjust widths and heights of cells.
+rt <- autofit(rt)
+rt
+```
+
+
+
+
+
+Tableone:
+
+```{r TableOne1, include = TRUE}
+library(tableone)
+
+CreateTableOne(data = iris, strata = "Species",
+               test = FALSE)
+```
+
+Tableone again:
+
+
+```{r TableOne2, eval=FALSE, include = FALSE}
+tab <- CreateTableOne(data = iris, strata = "Species",
+                      test = FALSE)
+print(tab, nonnormal = c("Petal.Length", "Petal.Width"))
+```
+
+
+
+
+
+```{r Table1, eval = FALSE, include = FALSE}
+library(table1)
+table1(~ . | Species, data = iris)
+```
+
+
+
+
+
+```{r Regression, echo = TRUE}
+fm <- lm(mpg ~ 1 + wt, data = mtcars)
+```
+
+
+
+
+
+```{r RegressionOutputRaw, include = TRUE}
+summary(fm)
+```
+
+```{r RegressionOutputTidy, include = TRUE}
+library(broom)
+tidy(fm)
+```
+
+```{r RegressionModelSummary, include = TRUE}
+glance(fm)
+```
+
+
+
+
+
+
+
+```{r Sine, include = TRUE}
+plot(sin, -pi, 2 * pi)
+title(main = substitute(paste("Sine from ", -pi, " to 2", pi)))
+```
+
+
+
+
+
+```{r knitr-setup2, include = FALSE}
+opts_chunk$set(echo = FALSE, include = FALSE,
+               fig.path = "Figures/", dev = "jpeg")
+```
+
+```{r Sine2, include = TRUE}
+plot(sin, -pi, 2 * pi)
+title(main = substitute(paste("Sine from ", -pi, " to 2", pi)))
+```
+
+
+
+
+
+```{r SineSmall, include = TRUE, fig.height = 3, fig.width = 3}
+plot(sin, -pi, 2 * pi)
+```
+
+
+
+
+
+```{r Cosine, include = TRUE, fig.cap = "Fig. 2: A Cosine Curve."}
+plot(cos, -pi, 2 * pi)
+```

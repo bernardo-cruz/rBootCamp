@@ -1,5 +1,5 @@
 ---
-title: "R-Bootcamp report"
+title: "R-Bootcamp Report"
 author: "Bernardo Freire Barboza da Cruz & Leonid Gavrilyuk"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -15,6 +15,8 @@ output:
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(lattice)
+library(ggplot2)
 ```
 
 \pagebreak
@@ -66,7 +68,11 @@ str(wahlNachAlterGeschlechtJahr)
 str(GemeinratBtgUrnergangQuartier)
 ```
 
-## Data Exploration
+## Data Exploration & Visualization
+
+```{r, echo = FALSE}
+
+```
 
 ## Merging Data
 

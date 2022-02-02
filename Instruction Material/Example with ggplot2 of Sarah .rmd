@@ -1,0 +1,78 @@
+---
+title: "Irises with ggplot2"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+## Introduction
+
+This script explores the iris dataset using ggplot2. A similar package, plotnine, is available for python. 
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE)
+
+# install.packages(c("tidyverse", "scales", "plotly", "ggthemes"))
+library(tidyverse)
+library(scales)
+library(plotly)
+library(ggthemes)
+```
+
+```{r}
+df_iris_means <- iris %>%
+  group_by(Species) %>%
+  summarize(mean_sepal_ratio = mean(Sepal.Width/Sepal.Length)) %>%
+  ungroup
+
+plot_iris_ratios <- ggplot(data = iris,
+                           aes(x = Petal.Width/Petal.Length,
+                               y = Sepal.Width/Sepal.Length)) +
+  geom_hline(data = df_iris_means, 
+             aes(yintercept = mean_sepal_ratio,
+                 colour = Species)) +
+  geom_hline(aes(yintercept = mean(Sepal.Width/Sepal.Length)),
+             colour = "lightgrey", linetype = "dashed") +
+  geom_point(alpha = 0.4, aes(colour = Species)) +
+  facet_wrap(~ Species) +
+  geom_smooth(method = "lm", se = FALSE, 
+              aes(colour = Species)) +
+  # geom_rug(alpha = 0.3) +
+  theme_minimal() + 
+  scale_y_continuous("Sepal w/l ratio",
+                     breaks = seq(from = 0, to = 1, by = 0.2),
+                     # labels = percent,
+                     limits = c(0, NA)) +
+  scale_x_continuous("Petal w/l ratio",
+                     limits = c(0, NA),
+                     breaks = seq(from = 0, to = 1, by = 0.2)) +
+  ggtitle("Iris sepal and petal ratios") +
+  theme(legend.position = "bottom",
+        # axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_color_brewer("Iris species", type = "qual",  palette = "Set1")
+```
+
+```{r}
+ggplotly(plot_iris_ratios) %>%
+  layout(legend = list(orientation = "h", x = 0.2, y = -0.2))
+```
+
+```{r}
+# Example of just changing a mapping for a ggplot object.
+# In this case, we flip the x and y values (but note that the axis labels stay constant)
+# plot_iris_ratios %+% 
+#   aes(x = Sepal.Width/Sepal.Length,
+#       y = Petal.Width/Petal.Length)
+
+```
+
+## Conclusion
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

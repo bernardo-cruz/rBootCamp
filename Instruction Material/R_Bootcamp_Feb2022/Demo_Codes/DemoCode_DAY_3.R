@@ -28,10 +28,10 @@ t.test(Sepal.Length ~ Species, data = d.iris.2.sp)
 ## - note scientific notation (i.e. 2e-07 = 2 * 10^(-7) = 0.0000002)
 ## - note the test actually carried out
 ##
-t.test(Sepal.Length ~ Species, var.equal = TRUE,
+t.test(Sepal.Length ~ Species, var.equal = TRUE, # We assume two identical variance
        data = d.iris.2.sp) 
 ## - NB: the machine runs the t-test ...
-## YOU must understand-interpret-communicate the resutls
+## YOU must understand-interpret-communicate the results
 
 
 ## the linear model for iris ##
@@ -44,6 +44,7 @@ lm.iris <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species,
               data = d.iris.2.sp)
 ## get results
 summary(lm.iris)
+summary_lm.iris <- summary(lm.iris)
 
 ## further "model-related" functions
 lm.iris.no.species <- lm(Sepal.Length ~ Sepal.Width + Petal.Length +
@@ -72,7 +73,7 @@ library(ggplot2)
 ggplot(mapping = aes(y = resid(lm.iris),
                      x = fitted(lm.iris))) +
   geom_point() +
-  geom_smooth()
+  geom_smooth() # remove error bandth -> s.e = F
 ##
 ## let's add a reference on zero
 ggplot(mapping = aes(y = resid(lm.iris),

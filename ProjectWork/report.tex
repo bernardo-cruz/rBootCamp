@@ -5,12 +5,13 @@
 \documentclass[
 ]{article}
 \usepackage{lmodern}
-\usepackage{amssymb,amsmath}
+\usepackage{amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
 \else % if luatex or xetex
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
@@ -36,21 +37,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={R-Bootcamp report},
+  pdftitle={R-Bootcamp Report},
   pdfauthor={Bernardo Freire Barboza da Cruz \& Leonid Gavrilyuk},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
-\usepackage{longtable,booktabs}
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -72,9 +64,9 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
-\title{R-Bootcamp report}
+\title{R-Bootcamp Report}
 \author{Bernardo Freire Barboza da Cruz \& Leonid Gavrilyuk}
-\date{01 February, 2022}
+\date{03 February, 2022}
 
 \begin{document}
 \maketitle
@@ -90,15 +82,24 @@
 
 Describe the use case\ldots.
 
-\hypertarget{which-is-the-most-activate-kreis}{%
-\subsection{Which is the most activate
-Kreis?}\label{which-is-the-most-activate-kreis}}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Most active districts\\
+\item
+  Party dynamics 2006-2018\\
+\item
+  Activity of genders (e.g.~women are active voters)\\
+\item
+  Activity of age groups\\
+\item
+  Relationships between education and activity.\\
+\item
+  Relationships between income and activity.
+\end{enumerate}
 
-\hypertarget{tbd}{%
-\subsection{TBD}\label{tbd}}
-
-\hypertarget{tbd-1}{%
-\subsection{TBD}\label{tbd-1}}
+\pagebreak
 
 \hypertarget{extract-and-transform}{%
 \section{Extract and Transform}\label{extract-and-transform}}
@@ -109,361 +110,45 @@ Kreis?}\label{which-is-the-most-activate-kreis}}
 The data is imported from
 \emph{\href{https://data.stadt-zuerich.ch/}{Stadt Zürich Open Data}}.
 
-The data looks as follows:
+\hypertarget{exploration-wealth-and-income-data}{%
+\subsubsection{Exploration: Wealth and Income
+data}\label{exploration-wealth-and-income-data}}
 
-\begin{longtable}[]{@{}rlrllr@{}}
-\toprule
-X\ldots Jahr & Partei & ParteiNr & Wahlkreis & WahlkreisSort &
-Stimmenanteil\tabularnewline
-\midrule
-\endhead
-1913 & SP & 1 & Stadt Zrich & 0 & 39.1\tabularnewline
-1913 & BGB/SVP & 2 & Stadt Zrich & 0 & NA\tabularnewline
-1913 & FDP & 3 & Stadt Zrich & 0 & 38.6\tabularnewline
-1913 & GPS & 4 & Stadt Zrich & 0 & NA\tabularnewline
-1913 & GLP & 5 & Stadt Zrich & 0 & NA\tabularnewline
-1913 & CVP & 6 & Stadt Zrich & 0 & 7.9\tabularnewline
-\bottomrule
-\end{longtable}
+\hypertarget{wealth-data}{%
+\paragraph{Wealth Data}\label{wealth-data}}
 
-\begin{longtable}[]{@{}rrlrrlrlrlrlrlllr@{}}
-\toprule
-\begin{minipage}[b]{0.06\columnwidth}\raggedleft
-X\ldots StichtagDatJahr\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedleft
-StichtagDatMM\strut
-\end{minipage} & \begin{minipage}[b]{0.05\columnwidth}\raggedright
-StichtagDatMonat\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedleft
-StichtagDat\strut
-\end{minipage} & \begin{minipage}[b]{0.02\columnwidth}\raggedleft
-SexCd\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedright
-SexLang\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedleft
-AlterV20Sort\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedright
-AlterV20Kurz\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedleft
-HerkunftCd\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedright
-HerkunftLang\strut
-\end{minipage} & \begin{minipage}[b]{0.02\columnwidth}\raggedleft
-KreisCd\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedright
-KreisLang\strut
-\end{minipage} & \begin{minipage}[b]{0.02\columnwidth}\raggedleft
-QuarCd\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedright
-QuarLang\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedright
-DatenstandCd\strut
-\end{minipage} & \begin{minipage}[b]{0.05\columnwidth}\raggedright
-DatenstandLang\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedleft
-AnzBestWir\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-11\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Rathaus\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-114\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-12\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Hochschulen\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-24\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-13\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Lindenhof\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-37\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-14\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-City\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-48\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-2\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 2\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-21\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Wollishofen\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-950\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-2\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 2\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-23\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Leimbach\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-361\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\end{longtable}
+\includegraphics{report_files/figure-latex/plot_wealth-1.pdf}
 
-\begin{longtable}[]{@{}rrlr@{}}
-\toprule
-X\ldots Jahr & Alter & Geschlecht & Anteil\tabularnewline
-\midrule
-\endhead
-2019 & 18 & Mnner & 22.6\tabularnewline
-2019 & 18 & Frauen & 25.1\tabularnewline
-2019 & 19 & Mnner & 19.1\tabularnewline
-2019 & 19 & Frauen & 21.4\tabularnewline
-2019 & 20 & Mnner & 21.4\tabularnewline
-2019 & 20 & Frauen & 20.6\tabularnewline
-\bottomrule
-\end{longtable}
+\hypertarget{income}{%
+\paragraph{Income}\label{income}}
 
-\begin{longtable}[]{@{}rrlrrrr@{}}
-\toprule
-X\ldots Jahr & QNr & Qname & Sberechtigte & Nteilnehmende & teilnehmende
-& Beteiligung\tabularnewline
-\midrule
-\endhead
-2006 & 11 & Rathaus (Kreis 1) & 1974 & 1186 & 788 & 39.9\tabularnewline
-2006 & 12 & Hochschulen (Kreis 1) & 377 & 232 & 145 &
-38.5\tabularnewline
-2006 & 13 & Lindenhof (Kreis 1) & 1335 & 962 & 373 & 27.9\tabularnewline
-2006 & 14 & City (Kreis 1) & 597 & 440 & 157 & 26.3\tabularnewline
-2006 & 21 & Wollishofen (Kreis 2) & 10115 & 6168 & 3947 &
-39.0\tabularnewline
-2006 & 23 & Leimbach (Kreis 2) & 3123 & 1997 & 1126 &
-36.1\tabularnewline
-\bottomrule
-\end{longtable}
+\includegraphics{report_files/figure-latex/plot_income-1.pdf}
 
-and the column types look as follows:
+\hypertarget{exploration-education}{%
+\subsubsection{Exploration: Education}\label{exploration-education}}
 
-\begin{verbatim}
-## 'data.frame':    4437 obs. of  6 variables:
-##  $ X...Jahr     : int  1913 1913 1913 1913 1913 1913 1913 1913 1913 1916 ...
-##  $ Partei       : chr  "SP" "BGB/SVP" "FDP" "GPS" ...
-##  $ ParteiNr     : int  1 2 3 4 5 6 7 8 9 1 ...
-##  $ Wahlkreis    : chr  "Stadt Z\303\274rich" "Stadt Z\303\274rich" "Stadt Z\303\274rich" "Stadt Z\303\274rich" ...
-##  $ WahlkreisSort: chr  "0" "0" "0" "0" ...
-##  $ Stimmenanteil: num  39.1 NA 38.6 NA NA 7.9 NA NA 14.4 43.9 ...
-\end{verbatim}
+\hypertarget{preproces-data}{%
+\paragraph{Preproces Data}\label{preproces-data}}
 
-\begin{verbatim}
-## 'data.frame':    194897 obs. of  17 variables:
-##  $ X...StichtagDatJahr: int  1998 1998 1998 1998 1998 1998 1998 1998 1998 1998 ...
-##  $ StichtagDatMM      : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ StichtagDatMonat   : chr  "Januar" "Januar" "Januar" "Januar" ...
-##  $ StichtagDat        : int  13910 13910 13910 13910 13910 13910 13910 13910 13910 13910 ...
-##  $ SexCd              : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ SexLang            : chr  "m\303\244nnlich" "m\303\244nnlich" "m\303\244nnlich" "m\303\244nnlich" ...
-##  $ AlterV20Sort       : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ AlterV20Kurz       : chr  "0-19" "0-19" "0-19" "0-19" ...
-##  $ HerkunftCd         : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ HerkunftLang       : chr  "Schweizer/in" "Schweizer/in" "Schweizer/in" "Schweizer/in" ...
-##  $ KreisCd            : int  1 1 1 1 2 2 2 3 3 3 ...
-##  $ KreisLang          : chr  "Kreis 1" "Kreis 1" "Kreis 1" "Kreis 1" ...
-##  $ QuarCd             : int  11 12 13 14 21 23 24 31 33 34 ...
-##  $ QuarLang           : chr  "Rathaus" "Hochschulen" "Lindenhof" "City" ...
-##  $ DatenstandCd       : chr  "V" "V" "V" "V" ...
-##  $ DatenstandLang     : chr  "Ver\303\266ffentlicht" "Ver\303\266ffentlicht" "Ver\303\266ffentlicht" "Ver\303\266ffentlicht" ...
-##  $ AnzBestWir         : int  114 24 37 48 950 361 444 592 961 721 ...
-\end{verbatim}
+The encoding of the column \texttt{RaumSort} consists of the Kreis and
+further local details. The last digit describes neighborhood of each
+Kreis. It means:
 
-\begin{verbatim}
-## 'data.frame':    312 obs. of  4 variables:
-##  $ X...Jahr  : int  2019 2019 2019 2019 2019 2019 2019 2019 2019 2019 ...
-##  $ Alter     : int  18 18 19 19 20 20 21 21 22 22 ...
-##  $ Geschlecht: chr  "M\303\244nner" "Frauen" "M\303\244nner" "Frauen" ...
-##  $ Anteil    : num  22.6 25.1 19.1 21.4 21.4 20.6 20.1 19.4 19.8 22.1 ...
-\end{verbatim}
+\begin{itemize}
+\tightlist
+\item
+  Two digits: The first digit describes the Kreis and the second the
+  neighborhood
+\item
+  Three digits: The first \emph{two} digits describes the Kreis and the
+  third the neighborhood
+\end{itemize}
 
-\begin{verbatim}
-## 'data.frame':    136 obs. of  7 variables:
-##  $ X...Jahr     : int  2006 2006 2006 2006 2006 2006 2006 2006 2006 2006 ...
-##  $ QNr          : int  11 12 13 14 21 23 24 31 33 34 ...
-##  $ Qname        : chr  "Rathaus (Kreis 1)" "Hochschulen (Kreis 1)" "Lindenhof (Kreis 1)" "City (Kreis 1)" ...
-##  $ Sberechtigte : int  1974 377 1335 597 10115 3123 5093 8358 6005 10821 ...
-##  $ Nteilnehmende: int  1186 232 962 440 6168 1997 3209 5555 3804 7643 ...
-##  $ teilnehmende : int  788 145 373 157 3947 1126 1884 2803 2201 3178 ...
-##  $ Beteiligung  : num  39.9 38.5 27.9 26.3 39 36.1 37 33.5 36.7 29.4 ...
-\end{verbatim}
+Add a new column to dataset for Kreis and neighborhood.
 
-\hypertarget{data-exploration}{%
-\subsection{Data Exploration}\label{data-exploration}}
+\hypertarget{data-exploration-visualization}{%
+\subsection{Data Exploration \&
+Visualization}\label{data-exploration-visualization}}
 
 \hypertarget{merging-data}{%
 \subsection{Merging Data}\label{merging-data}}

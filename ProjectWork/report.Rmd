@@ -13,75 +13,152 @@ output:
         fig_height: 9
         df_print: kable
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+```{r setup, include = FALSE}
+# Set echo, include, warning, message to FALSE
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE,
+	include = FALSE
+)
+# Import libraries
 library(lattice)
 library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
 ```
 
 \pagebreak
 
-# Introduction
+# Introduction  
 Describe the use case....
 
-## Which is the most activate Kreis?
-## TBD
-## TBD
+1. Most active districts				
+2. Party dynamics 2006-2018				
+3. Activity of genders (e.g. women are active voters)				
+4. Activity of age groups				
+5. Relationships between education and activity.				
+6. Relationships between income and activity.				
+
+\pagebreak
 
 # Extract and Transform
 ## Data Import
 The data is imported from _[Stadt Zürich Open Data](https://data.stadt-zuerich.ch/)_. 
-```{r import data, echo = FALSE}
-StadtkreisStimmenAnteilPartei <- read.csv(
-    'https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_stimmant_seit1913_od7000/download/POL700OD7000.csv'
+```{r import_data, echo = FALSE, cache=TRUE} 
+# Set cache to true
+VermoegenSteuerKreis <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/fd_median_vermoegen_kreis_od1008/download/WIR100OD1008.csv'
 )
 
-bevMonatBestandQuartierGeschlHerkunft <- read.csv(
-    'https://data.stadt-zuerich.ch/dataset/bev_monat_bestand_quartier_geschl_ag_herkunft_od3250/download/BEV325OD3250.csv'
+EinkommenSteuerKreis <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/fd_median_einkommen_kreis_od1007/download/WIR100OD1007.csv'
 )
 
-wahlNachAlterGeschlechtJahr <- read.csv(
-    'https://data.stadt-zuerich.ch/dataset/politik_kantonsratswahlen_btg_urnengang_alter_geschl_od7029/download/POL702OD7029.csv'
+BildungKreisBildung <- read.csv(
+    'https://data.stadt-zuerich.ch/dataset/bfs_bev_bildungsstand_statquartier_od1012/download/BIL101OD1012.csv'
 )
+```
 
-GemeinratBtgUrnergangQuartier <- read.csv(
-    'https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_btg_urnengang_quartier_od7005/download/POL700OD7005.csv'
-)
+### Exploration & Visualization: Wealth and Income data
+
+#### Wealth Data  
+
+```{r}
+(head(VermoegenSteuerKreis))
+(summary(VermoegenSteuerKreis))
+```
+
+```{r plot_wealth, include = TRUE}
+ggplot(data = VermoegenSteuerKreis,
+                         aes(x = SteuerJahr,
+                             y = SteuerVermoegen_p50)) +
+    geom_point(alpha = 0.4, aes(colour = KreisLang)) +
+    theme_minimal() +
+    facet_wrap(~ SteuerTarifLang) + #, scales = "free_y") +
+    geom_smooth(alpha = 0.1, method = "lm", se = FALSE, 
+                aes(colour = KreisLang)) +
+    ggtitle("Wealth per year and kreis in city of Zurich") + 
+    labs(y = "Median value") +
+    theme(legend.position = "bottom",
+        # axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(hjust = 0.5)) # +
+    #scale_color_brewer("Kreis", type = "qual",  palette = "Set1")
 
 ```
 
-The data looks as follows:
+#### Income  
 
-```{r, echo = FALSE}
-head(StadtkreisStimmenAnteilPartei)
-head(bevMonatBestandQuartierGeschlHerkunft)
-head(wahlNachAlterGeschlechtJahr)
-head(GemeinratBtgUrnergangQuartier)
+```{r}
+(head(EinkommenSteuerKreis))
+(summary(EinkommenSteuerKreis))
 ```
 
-and the column types look as follows:
-
-```{r, echo = FALSE}
-str(StadtkreisStimmenAnteilPartei)
-str(bevMonatBestandQuartierGeschlHerkunft)
-str(wahlNachAlterGeschlechtJahr)
-str(GemeinratBtgUrnergangQuartier)
+```{r plot_income, include = TRUE}
+ggplot(data = EinkommenSteuerKreis,
+                         aes(x = SteuerJahr,
+                             y = SteuerEinkommen_p50)) +
+    geom_point(alpha = 0.4, aes(colour = KreisLang)) +
+    theme_minimal() +
+    facet_wrap(~ SteuerTarifLang) +
+    geom_smooth(alpha = 0.1, method = "lm", se = FALSE, 
+                aes(colour = KreisLang)) +
+    ggtitle("Income per year and kreis in city of Zurich") + 
+    labs(y = "Median value") +
+    theme(legend.position = "bottom",
+        # axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(hjust = 0.5)) # +
+    #scale_color_brewer("Kreis", type = "qual",  palette = "Paired")
 ```
 
-## Data Exploration & Visualization
-
-```{r, echo = FALSE}
-
+#### Combine Wealth and Income data  
+The aim of this part is to combine the income and wealth data into one dataframe.  
+```{r}
+head(EinkommenSteuerKreis)
 ```
 
-## Merging Data
+```{r}
+head(VermoegenSteuerKreis)
+```
 
-## Data Visualization
+```{r}
+# Merge the two frames and drop redundant column KreisLang
+EinkommenVermoegenSteuerKreis <- merge(
+    EinkommenSteuerKreis, 
+    VermoegenSteuerKreis)
 
-## Fit Model
+# 
+EinkommenVermoegenSteuerKreis <-EinkommenVermoegenSteuerKreis[,!(names(EinkommenVermoegenSteuerKreis) %in% c("KreisLang","SteuerTarifLang"))]
 
-## Chapter of Choice TBD
+# Convert columns to factor
+EinkommenVermoegenSteuerKreis[,2:3] <- sapply(EinkommenVermoegenSteuerKreis[,2:3], as.factor)
+EinkommenVermoegenSteuerKreis
+```
 
-# References
+````{r}
+EinkommenVermoegenSteuerKreis[EinkommenVermoegenSteuerKreis$KreisSort == c("1","2")]
+```
+
+### Exploration: Education  
+#### Preproces Data   
+
+
+## Data Exploration & Visualization  
+
+```{r}
+head(BildungKreisBildung)
+```
+
+## Merging Data  
+
+## Data Visualization  
+
+## Fit Model  
+
+## Chapter of Choice TBD  
+
+# References  
 
 

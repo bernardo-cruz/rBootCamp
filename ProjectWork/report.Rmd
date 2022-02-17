@@ -152,6 +152,226 @@ head(BildungKreisBildung)
 ```
 
 ## Merging Data  
+---
+title: "RBootcamp"
+author: "Bernardo Freire, Leonid Gavrilyuk"
+date: "2/24/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = '/Users/leonidgavrilyuk/Desktop/R_Bootcamp')
+```
+# 1. Introduction. 
+## 1.1. Project goal
+The goal is to understand the dynamics in the performance of each part in each electoral district of the city. The time span in interest is **2006-2018 ???**
+The questions to be answered: the portrait of the voters, identification of  relationship (if any) between such characteristics as voters' education or age and the election results of the party. 
+
+## 1.2. Data
+To perform analysis, six data sets covering the time period 2006-2022 were retrieved from the Open Data platform of the City of Zürich:
+
+* Turnout at the city and municipal council elections, by city district, since 2006. (*Beteiligung am Urnengang der Stadt- und Gemeinderatswahlen nach Stadtquartier*)
+* Municipal elections vote share, by party and electoral district, since 1913. (*Gemeinderatswahlen Stimmenanteil nach Partei und Wahlkreis*)
+* Turnout at the city and municipal council elections, by age and gender, since 2006.
+??
+??
+
+The data sets did not have the same content and were not organised in the same way. Each data set contained some irrelevant information - for example, historical election data since 1913 whereas the time span of interest is 2006-2018. This required data preparation activities. Each data set was prepared, subsequently all of them were merged into one final table. 
+
+# 2. Data Preparation 
+
+### 2.1. Data set 1: Turnout at the city and municipal council elections since 2006, by city district.
+
+The data set of dimensions 136x7 reflects how many people from each city district participated in five last elections (2006-2022). 
+
+```{r Beteiligung am Urnengang 1, echo=FALSE, results='asis'}
+setwd("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp")
+d.gen <- read.table("Beteiligung__nachStadtquartier.csv", header = TRUE, sep = ",")
+dim(d.gen)
+
+library (knitr)
+kable(d.gen[1:6, ], caption = "Original data set: Turnout in the city and municipal council elections since 2006, by city district")
+
+```
+
+Examination of the dataset revealed an important issue: The territorial entity in this dataset is a city district - *"Stadtquartier"*. However, in Zürich, the elections are held across 12 electoral districts - *"Wahlkreise"*. Each electoral district consists of several "Stadtquartiers". For example, electoral district "Kreis 1+2" unites six city districts (they are shown in the "Qname" column in the Table 1 above).  
+
+To address the issue, the following manipulations were performed:
+
+- In the column "Qname", the electoral district is specified in the parentheses: e.g. "Rathaus (Kreis 1)". The content of the parentheses was extracted with the **stringr package** and stored in the created column "DistrictName". 
+- Rename the electoral districts to reflect the fact that some city districts are merged for the elections - for example "Kreis 1" and "Kreis 2" became "Kreis 1+2". This was done with the **dplyr mutate() function**. 
+- Calculate the mean values for each group and year using **dplyr group_by() and summarise() functions** (saved as a separate data frame). The results is saved as a separate data frame, with the new column "PercentageOfDistrict".
+- Calculate percentage of each district's voters relative to the total number of the city voters using **dplyr group_by() %>% summarise() %>% transmute() functions**. The results is saved as a separate data frame, with the new column "PercentageOfCity".
+- Merge the dataframes with the **dplyr inner_join()**. 
+- Change "Jahr" and "DistrictName" to factors with the built-in **as.factor()**
+
+
+```{r Beteiligung am Urnengang/Preparation, echo=FALSE, include=FALSE}
+#Create the "DistrictName" column that stores the content of the parenthesis. 
+#E.g. Rathaus (Kreis 1) - > Kreis 1
+library (stringr)
+d.gen$DistrictName <- str_extract_all(d.gen$Qname,"\\([^()]+\\)")
+d.gen$DistrictName <- substring(d.gen$DistrictName, 2, 
+                                      nchar(d.gen$DistrictName)-1)
+head(d.gen, 30)
+
+##Create the DistrictNr column that stores only the number of the electoral district.
+d.gen$DistrictNr <- str_sub(d.gen$DistrictName, 
+                                    start = 6, 
+                                    end = -1)
+head(d.gen,10)
+
+# to reflect the fact some city districts are merged for the elections (e.g. "Kreis 1+2")
+library(dplyr)
+d.gen <- d.gen %>%
+  mutate(DistrictName = recode(DistrictName, 
+                               'Kreis 1' = 'Kreis 1+2', 
+                               'Kreis 2' = 'Kreis 1+2', 
+                               'Kreis 4' = 'Kreis 4+5',
+                               'Kreis 5' = 'Kreis 4+5',
+                               'Kreis 7' ='Kreis 7+8',
+                               'Kreis 8' ='Kreis 7+8'))
+head(d.gen,34)
+              
+#Calculate mean by each group and year using dplyr's group_by
+df_1 <- d.gen %>% group_by(Jahr, DistrictName) %>% summarise(PercentageOfDistrict =mean(Beteiligung)) 
+head(df_1)
+
+#Calculate sum of the voters for each district and year using dplyr's group_by.
+#Calculate percentage of each district's voters relative to the total number of the city voters.
+df_2 <- d.gen %>%
+  group_by(Jahr, DistrictName) %>%
+  summarise(TotalVoted=sum(teilnehmende)) %>% 
+  transmute (DistrictName, PercentageOfCity = (TotalVoted/sum(TotalVoted))*100)
+head(df_2)
+
+#Merge with dplyr
+df_fin <- df_1 %>% inner_join(df_2)
+head(df_fin,10)
+
+#Reorder so that DistrictName is sorted not alphabetically
+#Change "DistrictName" to numeric
+
+
+#Change "Jahr" and "DistrictName" to factors
+df_fin$DistrictName <- as.factor(df_fin$DistrictName)
+df_fin$Jahr <- as.factor(df_fin$Jahr)
+sapply(df_fin, class)
+
+#Rename Jahr to English version 
+
+df_fin %>% 
+  rename(
+    Year = Jahr
+    )
+
+df_fin[order(df_fin$Jahr, df_fin$DistrictName), ]
+head(df_fin, 30)
+
+
+
+#install.packages("writexl")
+#library("writexl")
+#write_xlsx(df,"/Users/leonidgavrilyuk/Desktop/RBootcamp/R_Bootcamp_Feb2022/DataSets/df.xlsx")
+
+
+```
+
+```{r Beteiligung am Urnengang 2, echo=FALSE, results='asis'}
+library (knitr)
+kable(df_fin[1:6, ], caption = "Final dataset: Turnout by electoral district")
+
+```
+
+The analysis shows that the amount of voters in each district has grown since 2006 - Zürich residents are becoming more active in exercising their right to vote. Kreis 6 has the highest percentage of active citizens, followed by Kreis 7+8 and Kreis 10. Residents of Kreis 12 are the least interested in the elections people in Zürich. However, when it comes to the percentage of all city voters, Kreis 12 contributes the third largest portion of votes. This means, politicians should mobilize residents of this district to gain votes on the city and national level elections. Other important districts are Kreis 7+8 (gives most votes) and Kreis 11 (second place). 
+
+```{r plot, echo=FALSE}
+
+library(ggplot2)
+#install.packages("cowplot")
+library(cowplot)
+p1 <- ggplot(data=df_fin, aes(x=Jahr, y=PercentageOfDistrict, group=DistrictName)) +
+  geom_line(aes(color=DistrictName))+
+  geom_point(aes(color=DistrictName)) 
+
+p2 <- ggplot(data=df_fin, aes(x=Jahr, y=PercentageOfCity, group=DistrictName)) +
+  geom_line(aes(color=DistrictName))+
+  geom_point(aes(color=DistrictName)) 
+
+plot(p1)
+#plot(p2)
+
+```
+
+### 2.2. Data set 2:  Municipal elections vote share, by party and electoral district since 1913.
+
+The data set of dimensions 5100x6 shows the results of each party at the elections since 1913. Naturally, it contains a lot of irrelevant information because of the changes that happened sine 1913. For example, for each year there are separate rows for "Kreis 1 (before 2002)", "Kreis 2 (before 2002) and "Kreis 1+2 (after 2006)" - the districts were united in 2002. Some political parties do not exist anymore; some parties changed their names. Additionally, the table is in the long format whereas the final data set requires it to be wide. 
+
+```{r Municipal elections vote share 1, echo=FALSE, results='asis'}
+setwd("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp")
+parties <- read.table("Gemeinderatswahlen_Stimmenanteil_nach_Partei_und_Wahlkreis.csv", header = TRUE, sep = ",")
+dim(parties)
+
+library (knitr)
+kable(parties[1:6, ], caption = "Original data set: Municipal elections vote share, by party and electoral district since 1913.")
+```
+
+The following manipulations were performed:
+
+* Choose only relevant time period (years 2006-2018) and eight still existing parties using the **%in% operator**.
+* Change the names of the electoral districts. For example, "Kreis 11 (ab 1974)" became simply "Kreis 11" - the content in the parentheses was removed with the  **stringr str_replace() function**. 
+* Rename the columns with  the **dplyr %>% rename() function** to keep them in line with the other tables (e.g. "Wahlkreis" to "DistrictName").
+* Remove unnecessary columns with the **dplyr %>% select() function**.
+* Transform the table into wide format with the **tidyverse pivot_wider() function**.
+* Merge the set with the first table "Turnout by electoral district" (see part 2.1.)
+
+```{r Municipal elections vote share 2, echo=FALSE, include=FALSE}
+#Choose only relevant time period (years 2006-2018) and eight still existing parties.
+
+library(dplyr)
+parties <- parties[parties$Jahr %in% c(2006, 2010, 2014, 2018), ]
+
+parties <- parties[parties$Partei %in% c("SP", "BGB/SVP", "GPS", "FDP", 
+                              "GLP", "CVP/Die Mitte", "AL", "EVP"), ]
+
+parties <- parties[parties$Wahlkreis %in% c("Kreis 1 + 2 (ab 2006)", "Kreis 9",
+                                            "Kreis 11 (ab 1974)", "Kreis 3",
+                                            "Kreis 4 + 5 (ab 2006)", "Kreis 10",
+                                            "Kreis 12 (ab 1974)", "Kreis 6",
+                                            "Kreis 7 + 8 (ab 2006)"), ]
+
+#Change the names of the electoral districts.
+library(stringr)
+parties$Wahlkreis <- str_replace(parties$Wahlkreis, " \\s*\\([^\\)]+\\)", "")
+parties
+
+#Rename the columns to keep them in line with the other tables (e.g. "Wahlkreis" to "DistrictName"). 
+parties <- parties %>% 
+  rename(
+    DistrictName = Wahlkreis,
+    Year = Jahr,
+    Party = Partei,
+    Result = Stimmenanteil) %>% 
+  select (-ParteiNr, -WahlkreisSort)
+
+#Transform the table into wide format.
+library(tidyr)
+parties <- pivot_wider(parties, 
+                                   names_from = "Party",
+                                   values_from = "Result")
+parties
+```
+
+```{r Municipal elections vote share 3, echo=FALSE, results='asis'}
+library (knitr)
+kable (parties[1:8, ], caption = "Final dataset: Municipal elections vote share, by party and electoral district, 2006-2018.")
+
+```
+
+The analysis shows that 
+
+## Merging Data
 
 ## Data Visualization  
 

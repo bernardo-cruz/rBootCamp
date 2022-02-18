@@ -1,12 +1,8 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 lattice
 ggplot2
 dplyr
 tidyr
 stringr
+knitr
+cowplot

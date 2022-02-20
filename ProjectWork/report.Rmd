@@ -247,7 +247,6 @@ The data set of dimensions 756x8 variables reflects how the wealth distribution 
 ```{r import_data_wealth, echo = FALSE, cache=TRUE, include = FALSE, results='asis'} 
 # Set cache to true
 VermoegenSteuerKreis <- read.csv('https://data.stadt-zuerich.ch/dataset/fd_median_vermoegen_kreis_od1008/download/WIR100OD1008.csv')
-VermoegenSteuerKreis$SteuerTarifSort %>% as.factor()
 ```
 
 ```{r initial_data_wealth, echo = FALSE, cache=TRUE, include = TRUE, results='asis'} 
@@ -258,6 +257,7 @@ kable(VermoegenSteuerKreis[1:6,4:8])
 Examinating the previous showed data revealed that the data set contains a lot of irrelevant information.
 For example, the columns *"KreisSort"* and *"KreisLang"* are redundant, since the first in simply the encoding of the second in number. 
 The same applies for the the columns *"SteuerTarifSort"* and *"SteuerTarifLang"*, since the first here again, is the encoding of the second in number. However, the columns *"KreisLang"* and *"SteuerTarifLang"* are redundant and therefore, droped. For practical reasons the columns *"SteuerVermoegen_p25"* and *"SteuerVermoegen_p75"* were droped as well.  
+Moreover, the columns *"SteuerTarifSort"* and *"KreisSort"* are converted to factors, since those columns are automatically defined as integer number. 
 Additionally, the names of the columns do not correspond with the previous data set and therefore, we have to change the following:  
 
 | Original Column Name | New Column Name |
@@ -270,45 +270,46 @@ Additionally, the names of the columns do not correspond with the previous data 
 Finally, after all modifications, the data set looks as follows:
 
 ```{r drop_columns_wealth, echo = FALSE, include = TRUE, results = 'asis'} 
-# Drop columns KreisLang and SteuerTarifLang
+VermoegenSteuerKreis$SteuerTarifSort <- VermoegenSteuerKreis$SteuerTarifSort %>% as.factor()
+VermoegenSteuerKreis$KreisSort <- VermoegenSteuerKreis$KreisSort %>% as.factor()
+
 VermoegenSteuerKreis <- VermoegenSteuerKreis[,! names(VermoegenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang","SteuerVermoegen_p25","SteuerVermoegen_p75")]
-VermoegenSteuerKreis %>%
+VermoegenSteuerKreis <- VermoegenSteuerKreis %>%
   rename(
     DistrictNumber = KreisSort,
     Year = SteuerJahr,
     Wealth = SteuerVermoegen_p50,
-    Category = SteuerTarifSort
+    TaxCategory = SteuerTarifSort
     )
 kable(VermoegenSteuerKreis[1:6,], caption = "Final data set: Distribution wealth tax per category, district and year")
-```
-
-```{r final_wealth_data, echo = FALSE, include = TRUE}
-
 ```
 
 The next graph shows the distribution of wealth per year, tax category and district in Zurich.
 
 ```{r plot_wealth, include = TRUE}
 ggplot(data = VermoegenSteuerKreis,
-                         aes(x = SteuerJahr,
-                             y = SteuerVermoegen_p50)) +
-    geom_point(alpha = 0.4, aes(colour = KreisSort)) +
+                         aes(x = Year,
+                             y = Wealth)) +
+    geom_point(alpha = 0.4, aes(colour = DistrictNumber)) +
     theme_minimal() +
-    facet_wrap(~ SteuerTarifSort, labeller = labeller(SteuerTarifSort = 
+    facet_wrap(~ TaxCategory, labeller = labeller(TaxCategory = 
       c("0" = "Individual Category",
         "1" = "Family Category",
         "2" = "Single Parent Category"))
     )+ 
     geom_smooth(alpha = 0.1, method = "lm", se = FALSE, 
-                aes(colour = KreisSort)) +
+                aes(colour = DistrictNumber)) +
     ggtitle("Wealth per year and kreis in city of Zurich") + 
     labs(y = "Median value") +
     theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 90, hjust = 1),
-        plot.title = element_text(hjust = 0.5)) # +
-    #scale_color_brewer("Kreis", type = "qual",  palette = "Set1")
+        plot.title = element_text(hjust = 0.5))  +
+    scale_color_brewer("Kreis", type = "qual",  palette = "Paired")
 
 ```
+
+The previous graph shows the distribution of wealth by district, year and tax category. Since the ordinate is scaled for all tax categories with the same values, it is clearly visible the difference of accumulated wealth between the districts across all and those differences seems to have a clear trend in increasing. The biggest differences between districts can be see in the _family category_ subgraph. The highest values have been observed for district 7 and the lowest values for district 12. District 7, however, has the highest values among all tax categories. District 12 shows as well across all categories the lowest values of accumulated as well. 
+
 
 ## Data set 4: Income distribution of the population in Zürich, by district
 The following data set of dimensions 756x8 variables reflects how the income distribution in absolute terms changed over time per district and per tax class.
@@ -316,47 +317,69 @@ The following table shows the accumulated income distribution across all distric
 
 ```{r import_data_income, echo = FALSE, include = TRUE}
 EinkommenSteuerKreis <- read.csv('https://data.stadt-zuerich.ch/dataset/fd_median_einkommen_kreis_od1007/download/WIR100OD1007.csv')
-kable(EinkommenSteuerKreis[1:6,], caption = "Original data set: Distribution income tax per category, district and year")
+kable(EinkommenSteuerKreis[1:6,1:4], caption = "Original data set: Distribution income tax per category, district and year")
+kable(EinkommenSteuerKreis[1:6,5:8])
 ```
 
-Examining the previous showed data revealed that the data set contains a lot of irrelevant information.
+Examinating the previous showed data revealed that the data set contains a lot of irrelevant information.
 For example, the columns *"KreisSort"* and *"KreisLang"* are redundant, since the first in simply the encoding of the second in number. 
-The same applies for the the columns *"SteuerTarifSort"* and *"SteuerTarifLang"*, since the first here again, is the encoding of the second in number.  
-However, the columns *"KreisLang"* and *"SteuerTarifLang"* are not redundant and therefore, droped. 
+The same applies for the the columns *"SteuerTarifSort"* and *"SteuerTarifLang"*, since the first column, here again, is the encoding of the second in number. However, the columns *"KreisLang"* and *"SteuerTarifLang"* are redundant and therefore, droped. For practical reasons the columns *"SteuerEinkommen_p25"* and *"SteuerEinkommen_p75"* were droped as well.  
+Moreover, the columns *"SteuerTarifSort"* and *"KreisSort"* are converted to factors, since those columns are automatically defined as integer number. 
+Additionally, the names of the columns do not correspond with the previous data set and therefore, we have to change the following:  
+
+| Original Column Name | New Column Name |
+| :------------------  | :-------------  |
+|      KreisSort       |  DistrictNumber |
+|      SteuerJahr      |      Year       |
+|  SteuerEinkommen_p50 |     Income      |
+|   SteuerTarifSort    |    Category     |
+
+Finally, after all modifications, the data set looks as follows:
 
 ```{r drop_columns_income, echo = FALSE, include = TRUE}
-# Drop columns KreisLang and SteuerTarifLang
-EinkommenSteuerKreis <- EinkommenSteuerKreis[,! names(EinkommenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang")]
-EinkommenSteuerKreis$KreisSort <- as.factor(EinkommenSteuerKreis$KreisSort)
-kable(EinkommenSteuerKreis[1:6,], caption = "Final data set: Distribution wealth tax per category, district and year")
+EinkommenSteuerKreis$SteuerTarifSort <- EinkommenSteuerKreis$SteuerTarifSort %>% as.factor()
+EinkommenSteuerKreis$KreisSort <- EinkommenSteuerKreis$KreisSort %>% as.factor()
+
+EinkommenSteuerKreis <- EinkommenSteuerKreis[,! names(EinkommenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang","SteuerEinkommen_p25","SteuerEinkommen_p75")]
+EinkommenSteuerKreis <- EinkommenSteuerKreis %>%
+  rename(
+    DistrictNumber = KreisSort,
+    Year = SteuerJahr,
+    Income = SteuerEinkommen_p50,
+    TaxCategory = SteuerTarifSort
+    )
+kable(EinkommenSteuerKreis[1:6,], caption = "Final data set: Distribution income tax per category, district and year")
 ```
 
 The next graph shows the distribution of income per year, tax category and district in Zurich.
 
 ```{r plot_income, include = TRUE}
 ggplot(data = EinkommenSteuerKreis,
-                         aes(x = SteuerJahr,
-                             y = SteuerEinkommen_p50)) +
-    geom_point(alpha = 0.4, aes(colour = KreisSort)) +
+                         aes(x = Year,
+                             y = Income)) +
+    geom_point(alpha = 0.4, aes(colour = DistrictNumber)) +
     theme_minimal() +
-    facet_wrap(~ SteuerTarifSort, labeller = labeller(SteuerTarifSort = 
+    facet_wrap(~ TaxCategory, labeller = labeller(TaxCategory = 
       c("0" = "Individual Category",
         "1" = "Family Category",
         "2" = "Single Parent Category"))
     )+ 
     geom_smooth(alpha = 0.1, method = "lm", se = FALSE, 
-                aes(colour = KreisSort)) +
+                aes(colour = DistrictNumber)) +
     ggtitle("Income per year and district in city of Zurich") + 
     labs(y = "Median value") +
     theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 90, hjust = 1),
-        plot.title = element_text(hjust = 0.5)) # +
-    #scale_color_brewer("Kreis", type = "qual",  palette = "Set1")
+        plot.title = element_text(hjust = 0.5))  +
+    scale_color_brewer("Kreis", type = "qual",  palette = "Paired")
 
 ```
 
+The previous graph shows the distribution of income by district, year and tax category. Since the ordinate is scaled for all tax categories with the same values, it is clearly visible the difference of accumulated income between the districts across all and those differences seems to have a clear trend in increasing. The biggest differences between districts can be see in the _family category_ subgraph. The highest values have been observed for district 7 and the lowest values for district 12. District 7, however, has the highest values among all tax categories. District 12 shows as well across all categories the lowest values of accumulated as well. 
+
+\newpage
 ## Combine Wealth and Income data  
-The aim of this part is to combine the income and wealth data into one dataframe.  
+The aim of this part is to combine the income and wealth data into one data frame. As a first step, both data frames are combine using the _merge()_ function. The merged data sets of income and wealth data, contains the income data and wealth data per district and tax category combined. 
 
 ```{r merging_income_wealth, echo = FALSE, include = TRUE}
 # Merge the two frames and drop redundant column KreisLang
@@ -364,15 +387,61 @@ EinkommenVermoegenSteuerKreis <- merge(
     EinkommenSteuerKreis, 
     VermoegenSteuerKreis)
 
-# # 
-# EinkommenVermoegenSteuerKreis <-EinkommenVermoegenSteuerKreis[,!(names(EinkommenVermoegenSteuerKreis) %in% c("KreisLang","SteuerTarifLang"))]
-
-# # Convert columns to factor
-# EinkommenVermoegenSteuerKreis[,2:3] <- sapply(EinkommenVermoegenSteuerKreis[,2:3], as.factor)
 kable(EinkommenVermoegenSteuerKreis[1:6,], caption = "Merged income and wealth data")
+```
+Thereafter, the district name has to be modified in order to match if the data presented in sections concerning *[Data set 1](#Data set 1: Turnout at the city and municipal council elections since 2006, by city district.)* and *[Data set 2](#Data set 2:  Municipal elections vote share, by party and electoral district since 1913.)*: The name of the districts corresponds to the prefix *"Kreis"* followed by *" + "* and the corresponding number. In the case of the *wealth* and *income* data frames, those values have to be transformed and combined as the following correspondence tables shows:  
+
+```{r merging_wealth_income, echo = FALSE, include = TRUE}
+# Create a correspondence table between the district names and the district numbers
+Names <- data.frame(
+  Number = seq(1,12) %>% as.character(),
+  Name = c(
+    "Kreis 1 + 2", "Kreis 1 + 2", 
+    "Kreis 3", "Kreis 4 + 5", 
+    "Kreis 4 + 5", "Kreis 6",
+    "Kreis 7 + 8", "Kreis 7 + 8",
+    "Kreis 9", "Kreis 10",
+    "Kreis 11", "Kreis 12")
+  )
+
+kable(Names, caption = "Correspondence table between district names and district numbers")
 
 ```
 
+Thereafter, several transformations have to be done as follows in order to transform the data into a mergable format:  
+- Pivot to a longer format the tables and combine the tax values  
+- Group by year, district name and tax type  
+- Average the values amount all categories within one district  
+- Pivot to wide format again to averaged values  
+
+After the step-by-step implementation of those transformation steps one gets the following data frame: 
+
+```{r transformations_wealth_income, echo = FALSE, include = TRUE}
+# Transformations
+EinkommenVermoegenSteuerKreis <- EinkommenVermoegenSteuerKreis %>%
+  pivot_longer(cols = 4:5, names_to = "TaxType",values_to = "TaxAmount") %>%
+  group_by(Year, DistrictNumber, TaxType) %>%
+  summarise(TotalTax = mean(TaxAmount) %>% round(3)) %>%
+  pivot_wider(names_from = c(TaxType), values_from = TotalTax, names_prefix = "Average ") %>%
+  mutate(DistrictNumber = recode(DistrictNumber,
+    '1' = "Kreis 1 + 2", 
+    '2' = "Kreis 1 + 2", 
+    '3' = "Kreis 3", 
+    '4' = "Kreis 4 + 5", 
+    '5' = "Kreis 4 + 5", 
+    '6' = "Kreis 6",
+    '7' = "Kreis 7 + 8", 
+    '8' = "Kreis 7 + 8",
+    '9' = "Kreis 9", 
+    '10' = "Kreis 10",
+    '11' = "Kreis 11", 
+    '12' = "Kreis 12")) %>%
+  rename(DistrictName = DistrictNumber) %>%
+  group_by(Year, DistrictName) %>%
+  summarise_at(c("Average Income","Average Wealth"), ~round(mean(.),3) )#%>% round(3) )#%>% round(3))
+
+kable(EinkommenVermoegenSteuerKreis[1:9,], caption = "Final wealth and income data frame per district and year")
+```
 \pagebreak
 # Merging Data
 

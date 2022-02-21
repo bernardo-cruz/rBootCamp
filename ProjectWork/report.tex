@@ -5,12 +5,13 @@
 \documentclass[
 ]{article}
 \usepackage{lmodern}
-\usepackage{amssymb,amsmath}
+\usepackage{amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
 \else % if luatex or xetex
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
@@ -36,13 +37,14 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={R-Bootcamp report},
-  pdfauthor={Bernardo Freire Barboza da Cruz \& Leonid Gavrilyuk},
+  pdftitle={R-Bootcamp Report},
+  pdfauthor={Leonid Gavrilyuk; Bernardo Freire Barboza da Cruz},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
 \usepackage{longtable,booktabs}
+\usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
 \makeatletter
@@ -72,330 +74,87 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
-\title{R-Bootcamp report}
-\author{Bernardo Freire Barboza da Cruz \& Leonid Gavrilyuk}
-\date{01 February, 2022}
+\title{R-Bootcamp Report}
+\author{Leonid Gavrilyuk\footnote{Hochschule Luzern,
+  \href{mailto:leonid.gavrilyuk@stud.hslu.ch}{\nolinkurl{leonid.gavrilyuk@stud.hslu.ch}}} \and Bernardo
+Freire Barboza da Cruz\footnote{Hochschule Luzern,
+  \href{mailto:bernardo.dacruz@stud.hslu.ch}{\nolinkurl{bernardo.dacruz@stud.hslu.ch}}}}
+\date{21 February, 2022}
 
 \begin{document}
 \maketitle
 
-{
-\setcounter{tocdepth}{2}
+\centering
+\raggedright
+\newpage
 \tableofcontents
-}
 \pagebreak
 
-\hypertarget{introduction}{%
-\section{Introduction}\label{introduction}}
+\hypertarget{introduction.}{%
+\section{Introduction.}\label{introduction.}}
 
-Describe the use case\ldots.
+\hypertarget{project-goal}{%
+\subsection{Project goal}\label{project-goal}}
 
-\hypertarget{which-is-the-most-activate-kreis}{%
-\subsection{Which is the most activate
-Kreis?}\label{which-is-the-most-activate-kreis}}
+The goal is to understand the dynamics in the performance of each part
+in each electoral district of the city. The time span in interest is
+\textbf{2006-2018 ???} The questions to be answered: the portrait of the
+voters, identification of relationship (if any) between such
+characteristics as voters' education or age and the election results of
+the party.
 
-\hypertarget{tbd}{%
-\subsection{TBD}\label{tbd}}
+\hypertarget{data}{%
+\subsection{Data}\label{data}}
 
-\hypertarget{tbd-1}{%
-\subsection{TBD}\label{tbd-1}}
+To perform analysis, six data sets covering the time period 2006-2022
+were retrieved from the Open Data platform of the City of Zürich:
 
-\hypertarget{extract-and-transform}{%
-\section{Extract and Transform}\label{extract-and-transform}}
+\begin{itemize}
+\tightlist
+\item
+  Turnout at the city and municipal council elections, by city district,
+  since 2006. (\emph{Beteiligung am Urnengang der Stadt- und
+  Gemeinderatswahlen nach Stadtquartier})
+\item
+  Municipal elections vote share, by party and electoral district, since
+  1913. (\emph{Gemeinderatswahlen Stimmenanteil nach Partei und
+  Wahlkreis})
+\item
+  Turnout at the city and municipal council elections, by age and
+  gender, since 2006. ?? ??
+\end{itemize}
 
-\hypertarget{data-import}{%
-\subsection{Data Import}\label{data-import}}
+The data sets did not have the same content and were not organised in
+the same way. Each data set contained some irrelevant information - for
+example, historical election data since 1913 whereas the time span of
+interest is 2006-2018. This required data preparation activities. Each
+data set was prepared, subsequently all of them were merged into one
+final table.
 
-The data is imported from
-\emph{\href{https://data.stadt-zuerich.ch/}{Stadt Zürich Open Data}}.
+\pagebreak
 
-The data looks as follows:
+\hypertarget{data-preparation}{%
+\section{Data Preparation}\label{data-preparation}}
 
-\begin{longtable}[]{@{}rlrllr@{}}
-\toprule
-X\ldots Jahr & Partei & ParteiNr & Wahlkreis & WahlkreisSort &
-Stimmenanteil\tabularnewline
-\midrule
-\endhead
-1913 & SP & 1 & Stadt Zrich & 0 & 39.1\tabularnewline
-1913 & BGB/SVP & 2 & Stadt Zrich & 0 & NA\tabularnewline
-1913 & FDP & 3 & Stadt Zrich & 0 & 38.6\tabularnewline
-1913 & GPS & 4 & Stadt Zrich & 0 & NA\tabularnewline
-1913 & GLP & 5 & Stadt Zrich & 0 & NA\tabularnewline
-1913 & CVP & 6 & Stadt Zrich & 0 & 7.9\tabularnewline
-\bottomrule
-\end{longtable}
+\hypertarget{data-set-1-turnout-at-the-city-and-municipal-council-elections-since-2006-by-city-district.}{%
+\subsection{Data set 1: Turnout at the city and municipal council
+elections since 2006, by city
+district.}\label{data-set-1-turnout-at-the-city-and-municipal-council-elections-since-2006-by-city-district.}}
 
-\begin{longtable}[]{@{}rrlrrlrlrlrlrlllr@{}}
-\toprule
-\begin{minipage}[b]{0.06\columnwidth}\raggedleft
-X\ldots StichtagDatJahr\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedleft
-StichtagDatMM\strut
-\end{minipage} & \begin{minipage}[b]{0.05\columnwidth}\raggedright
-StichtagDatMonat\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedleft
-StichtagDat\strut
-\end{minipage} & \begin{minipage}[b]{0.02\columnwidth}\raggedleft
-SexCd\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedright
-SexLang\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedleft
-AlterV20Sort\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedright
-AlterV20Kurz\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedleft
-HerkunftCd\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedright
-HerkunftLang\strut
-\end{minipage} & \begin{minipage}[b]{0.02\columnwidth}\raggedleft
-KreisCd\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedright
-KreisLang\strut
-\end{minipage} & \begin{minipage}[b]{0.02\columnwidth}\raggedleft
-QuarCd\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedright
-QuarLang\strut
-\end{minipage} & \begin{minipage}[b]{0.04\columnwidth}\raggedright
-DatenstandCd\strut
-\end{minipage} & \begin{minipage}[b]{0.05\columnwidth}\raggedright
-DatenstandLang\strut
-\end{minipage} & \begin{minipage}[b]{0.03\columnwidth}\raggedleft
-AnzBestWir\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-11\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Rathaus\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-114\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-12\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Hochschulen\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-24\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-13\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Lindenhof\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-37\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 1\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-14\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-City\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-48\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-2\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 2\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-21\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Wollishofen\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-950\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.06\columnwidth}\raggedleft
-1998\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Januar\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-13910\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-mnnlich\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-0-19\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-1\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-Schweizer/in\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-2\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Kreis 2\strut
-\end{minipage} & \begin{minipage}[t]{0.02\columnwidth}\raggedleft
-23\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedright
-Leimbach\strut
-\end{minipage} & \begin{minipage}[t]{0.04\columnwidth}\raggedright
-V\strut
-\end{minipage} & \begin{minipage}[t]{0.05\columnwidth}\raggedright
-Verffentlicht\strut
-\end{minipage} & \begin{minipage}[t]{0.03\columnwidth}\raggedleft
-361\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\end{longtable}
-
-\begin{longtable}[]{@{}rrlr@{}}
-\toprule
-X\ldots Jahr & Alter & Geschlecht & Anteil\tabularnewline
-\midrule
-\endhead
-2019 & 18 & Mnner & 22.6\tabularnewline
-2019 & 18 & Frauen & 25.1\tabularnewline
-2019 & 19 & Mnner & 19.1\tabularnewline
-2019 & 19 & Frauen & 21.4\tabularnewline
-2019 & 20 & Mnner & 21.4\tabularnewline
-2019 & 20 & Frauen & 20.6\tabularnewline
-\bottomrule
-\end{longtable}
+The data set of dimensions 136x7 reflects how many people from each city
+district participated in five last elections (2006-2022).
 
 \begin{longtable}[]{@{}rrlrrrr@{}}
+\caption{Original data set: Turnout in the city and municipal council
+elections since 2006, by city district}\tabularnewline
 \toprule
-X\ldots Jahr & QNr & Qname & Sberechtigte & Nteilnehmende & teilnehmende
-& Beteiligung\tabularnewline
+Jahr & QNr & Qname & Sberechtigte & Nteilnehmende & teilnehmende &
+Beteiligung\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Jahr & QNr & Qname & Sberechtigte & Nteilnehmende & teilnehmende &
+Beteiligung\tabularnewline
 \midrule
 \endhead
 2006 & 11 & Rathaus (Kreis 1) & 1974 & 1186 & 788 & 39.9\tabularnewline
@@ -410,72 +169,808 @@ X\ldots Jahr & QNr & Qname & Sberechtigte & Nteilnehmende & teilnehmende
 \bottomrule
 \end{longtable}
 
-and the column types look as follows:
+Examination of the dataset revealed an important issue: The territorial
+entity in this dataset is a city district - \emph{``Stadtquartier''}.
+However, in Zürich, the elections are held across 12 electoral districts
+- \emph{``Wahlkreise''}. Each electoral district consists of several
+``Stadtquartiers''. For example, electoral district ``Kreis 1+2'' unites
+six city districts (they are shown in the ``Qname'' column in the Table
+1 above).
 
-\begin{verbatim}
-## 'data.frame':    4437 obs. of  6 variables:
-##  $ X...Jahr     : int  1913 1913 1913 1913 1913 1913 1913 1913 1913 1916 ...
-##  $ Partei       : chr  "SP" "BGB/SVP" "FDP" "GPS" ...
-##  $ ParteiNr     : int  1 2 3 4 5 6 7 8 9 1 ...
-##  $ Wahlkreis    : chr  "Stadt Z\303\274rich" "Stadt Z\303\274rich" "Stadt Z\303\274rich" "Stadt Z\303\274rich" ...
-##  $ WahlkreisSort: chr  "0" "0" "0" "0" ...
-##  $ Stimmenanteil: num  39.1 NA 38.6 NA NA 7.9 NA NA 14.4 43.9 ...
-\end{verbatim}
+To address the issue, the following manipulations were performed:
 
-\begin{verbatim}
-## 'data.frame':    194897 obs. of  17 variables:
-##  $ X...StichtagDatJahr: int  1998 1998 1998 1998 1998 1998 1998 1998 1998 1998 ...
-##  $ StichtagDatMM      : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ StichtagDatMonat   : chr  "Januar" "Januar" "Januar" "Januar" ...
-##  $ StichtagDat        : int  13910 13910 13910 13910 13910 13910 13910 13910 13910 13910 ...
-##  $ SexCd              : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ SexLang            : chr  "m\303\244nnlich" "m\303\244nnlich" "m\303\244nnlich" "m\303\244nnlich" ...
-##  $ AlterV20Sort       : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ AlterV20Kurz       : chr  "0-19" "0-19" "0-19" "0-19" ...
-##  $ HerkunftCd         : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ HerkunftLang       : chr  "Schweizer/in" "Schweizer/in" "Schweizer/in" "Schweizer/in" ...
-##  $ KreisCd            : int  1 1 1 1 2 2 2 3 3 3 ...
-##  $ KreisLang          : chr  "Kreis 1" "Kreis 1" "Kreis 1" "Kreis 1" ...
-##  $ QuarCd             : int  11 12 13 14 21 23 24 31 33 34 ...
-##  $ QuarLang           : chr  "Rathaus" "Hochschulen" "Lindenhof" "City" ...
-##  $ DatenstandCd       : chr  "V" "V" "V" "V" ...
-##  $ DatenstandLang     : chr  "Ver\303\266ffentlicht" "Ver\303\266ffentlicht" "Ver\303\266ffentlicht" "Ver\303\266ffentlicht" ...
-##  $ AnzBestWir         : int  114 24 37 48 950 361 444 592 961 721 ...
-\end{verbatim}
+\begin{itemize}
+\tightlist
+\item
+  In the column ``Qname'', the electoral district is specified in the
+  parentheses: e.g.~``Rathaus (Kreis 1)''. The content of the
+  parentheses was extracted with the \textbf{stringr package} and stored
+  in the created column ``DistrictName''.
+\item
+  Rename the electoral districts to reflect the fact that some city
+  districts are merged for the elections - for example ``Kreis 1'' and
+  ``Kreis 2'' became ``Kreis 1+2''. This was done with the \textbf{dplyr
+  mutate() function}.
+\item
+  Calculate the mean values for each group and year using \textbf{dplyr
+  group\_by() and summarise() functions} (saved as a separate data
+  frame). The results is saved as a separate data frame, with the new
+  column ``PercentageOfDistrict''.
+\item
+  Calculate percentage of each district's voters relative to the total
+  number of the city voters using \textbf{dplyr group\_by()
+  \%\textgreater\% summarise() \%\textgreater\% transmute() functions}.
+  The results is saved as a separate data frame, with the new column
+  ``PercentageOfCity''.
+\item
+  Merge the dataframes with the \textbf{dplyr inner\_join()}.
+\item
+  Change ``Jahr'' and ``DistrictName'' to factors with the built-in
+  \textbf{as.factor()}
+\end{itemize}
 
-\begin{verbatim}
-## 'data.frame':    312 obs. of  4 variables:
-##  $ X...Jahr  : int  2019 2019 2019 2019 2019 2019 2019 2019 2019 2019 ...
-##  $ Alter     : int  18 18 19 19 20 20 21 21 22 22 ...
-##  $ Geschlecht: chr  "M\303\244nner" "Frauen" "M\303\244nner" "Frauen" ...
-##  $ Anteil    : num  22.6 25.1 19.1 21.4 21.4 20.6 20.1 19.4 19.8 22.1 ...
-\end{verbatim}
+\begin{longtable}[]{@{}llrr@{}}
+\caption{Final dataset: Turnout by electoral district}\tabularnewline
+\toprule
+Jahr & DistrictName & PercentageOfDistrict &
+PercentageOfCity\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Jahr & DistrictName & PercentageOfDistrict &
+PercentageOfCity\tabularnewline
+\midrule
+\endhead
+2006 & Kreis 1+2 & 34.95714 & 11.436022\tabularnewline
+2006 & Kreis 10 & 38.25000 & 12.176240\tabularnewline
+2006 & Kreis 11 & 31.80000 & 13.336140\tabularnewline
+2006 & Kreis 12 & 29.56667 & 5.654176\tabularnewline
+2006 & Kreis 3 & 33.20000 & 11.112771\tabularnewline
+2006 & Kreis 4+5 & 28.20000 & 7.482310\tabularnewline
+\bottomrule
+\end{longtable}
 
-\begin{verbatim}
-## 'data.frame':    136 obs. of  7 variables:
-##  $ X...Jahr     : int  2006 2006 2006 2006 2006 2006 2006 2006 2006 2006 ...
-##  $ QNr          : int  11 12 13 14 21 23 24 31 33 34 ...
-##  $ Qname        : chr  "Rathaus (Kreis 1)" "Hochschulen (Kreis 1)" "Lindenhof (Kreis 1)" "City (Kreis 1)" ...
-##  $ Sberechtigte : int  1974 377 1335 597 10115 3123 5093 8358 6005 10821 ...
-##  $ Nteilnehmende: int  1186 232 962 440 6168 1997 3209 5555 3804 7643 ...
-##  $ teilnehmende : int  788 145 373 157 3947 1126 1884 2803 2201 3178 ...
-##  $ Beteiligung  : num  39.9 38.5 27.9 26.3 39 36.1 37 33.5 36.7 29.4 ...
-\end{verbatim}
+The analysis shows that the amount of voters in each district has grown
+since 2006 - Zürich residents are becoming more active in exercising
+their right to vote. Kreis 6 has the highest percentage of active
+citizens, followed by Kreis 7+8 and Kreis 10. Residents of Kreis 12 are
+the least interested in the elections people in Zürich. However, when it
+comes to the percentage of all city voters, Kreis 12 contributes the
+third largest portion of votes. This means, politicians should mobilize
+residents of this district to gain votes on the city and national level
+elections. Other important districts are Kreis 7+8 (gives most votes)
+and Kreis 11 (second place).
 
-\hypertarget{data-exploration}{%
-\subsection{Data Exploration}\label{data-exploration}}
+\includegraphics{report_files/figure-latex/plot_election_per_district-1.pdf}
+
+\hypertarget{data-set-2-municipal-elections-vote-share-by-party-and-electoral-district-since-1913.}{%
+\subsection{Data set 2: Municipal elections vote share, by party and
+electoral district since
+1913.}\label{data-set-2-municipal-elections-vote-share-by-party-and-electoral-district-since-1913.}}
+
+The data set of dimensions 5100x6 shows the results of each party at the
+elections since 1913. Naturally, it contains a lot of irrelevant
+information because of the changes that happened sine 1913. For example,
+for each year there are separate rows for ``Kreis 1 (before 2002)'',
+``Kreis 2 (before 2002) and''Kreis 1+2 (after 2006)" - the districts
+were united in 2002. Some political parties do not exist anymore; some
+parties changed their names. Additionally, the table is in the long
+format whereas the final data set requires it to be wide.
+
+\begin{longtable}[]{@{}rlrlrr@{}}
+\caption{Original data set: Municipal elections vote share, by party and
+electoral district since 1913.}\tabularnewline
+\toprule
+Jahr & Partei & ParteiNr & Wahlkreis & WahlkreisSort &
+Stimmenanteil\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Jahr & Partei & ParteiNr & Wahlkreis & WahlkreisSort &
+Stimmenanteil\tabularnewline
+\midrule
+\endhead
+1913 & SP & 1 & Stadt Zürich & 0 & 39.1\tabularnewline
+1913 & BGB/SVP & 2 & Stadt Zürich & 0 & NA\tabularnewline
+1913 & FDP & 3 & Stadt Zürich & 0 & 38.6\tabularnewline
+1913 & GPS & 4 & Stadt Zürich & 0 & NA\tabularnewline
+1913 & GLP & 5 & Stadt Zürich & 0 & NA\tabularnewline
+1913 & CVP/Die Mitte & 6 & Stadt Zürich & 0 & 7.9\tabularnewline
+\bottomrule
+\end{longtable}
+
+The following manipulations were performed:
+
+\begin{itemize}
+\tightlist
+\item
+  Choose only relevant time period (years 2006-2018) and eight still
+  existing parties using the \textbf{\%in\% operator}.
+\item
+  Change the names of the electoral districts. For example, ``Kreis 11
+  (ab 1974)'' became simply ``Kreis 11'' - the content in the
+  parentheses was removed with the \textbf{stringr str\_replace()
+  function}.
+\item
+  Rename the columns with the \textbf{dplyr \%\textgreater\% rename()
+  function} to keep them in line with the other tables
+  (e.g.~``Wahlkreis'' to ``DistrictName'').
+\item
+  Remove unnecessary columns with the \textbf{dplyr \%\textgreater\%
+  select() function}.
+\item
+  Transform the table into wide format with the \textbf{tidyverse
+  pivot\_wider() function}.
+\item
+  Merge the set with the first table ``Turnout by electoral district''
+  (see part 2.1.)
+\end{itemize}
+
+\begin{longtable}[]{@{}rlrrrrrrrr@{}}
+\caption{Final dataset: Municipal elections vote share, by party and
+electoral district, 2006-2018.}\tabularnewline
+\toprule
+Year & DistrictName & SP & BGB/SVP & FDP & GPS & GLP & CVP/Die Mitte &
+AL & EVP\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & SP & BGB/SVP & FDP & GPS & GLP & CVP/Die Mitte &
+AL & EVP\tabularnewline
+\midrule
+\endhead
+2006 & Kreis 1 + 2 & 30.1 & 16.2 & 23.1 & 13.1 & 2.4 & 7.7 & 2.5 &
+3.0\tabularnewline
+2010 & Kreis 1 + 2 & 28.0 & 16.9 & 19.3 & 13.7 & 8.6 & 5.8 & 2.6 &
+1.9\tabularnewline
+2014 & Kreis 1 + 2 & 26.6 & 16.2 & 21.0 & 11.4 & 10.5 & 5.1 & 4.9 &
+1.9\tabularnewline
+2018 & Kreis 1 + 2 & 30.8 & 13.1 & 19.8 & 12.4 & 10.4 & 4.3 & 6.3 &
+1.5\tabularnewline
+2006 & Kreis 3 & 37.5 & 18.2 & 8.6 & 14.3 & 2.3 & 7.1 & 6.1 &
+2.3\tabularnewline
+2010 & Kreis 3 & 34.2 & 16.9 & 8.1 & 13.5 & 10.4 & 5.1 & 6.9 &
+1.7\tabularnewline
+2014 & Kreis 3 & 32.1 & 15.0 & 10.5 & 12.8 & 10.4 & 4.0 & 9.8 &
+1.4\tabularnewline
+2018 & Kreis 3 & 35.8 & 10.3 & 10.9 & 14.1 & 10.4 & 3.2 & 12.1 &
+1.6\tabularnewline
+\bottomrule
+\end{longtable}
+
+The analysis shows that
+
+\hypertarget{data-set-3-wealth-distribution-of-the-population-in-zuxfcrich-by-district}{%
+\subsection{Data set 3: Wealth distribution of the population in Zürich,
+by
+district}\label{data-set-3-wealth-distribution-of-the-population-in-zuxfcrich-by-district}}
+
+The data set of dimensions 756x8 variables reflects how the wealth
+distribution in absolute terms changed over time per district and per
+tax class. The following table shows the accumulated wealth distribution
+across all districts of the city of Zürich between the years 1999 and
+2019.
+
+\begin{longtable}[]{@{}rrlr@{}}
+\caption{Original data set: Distribution wealth tax per category,
+district and year}\tabularnewline
+\toprule
+SteuerJahr & KreisSort & KreisLang & SteuerTarifSort\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+SteuerJahr & KreisSort & KreisLang & SteuerTarifSort\tabularnewline
+\midrule
+\endhead
+1999 & 1 & Kreis 1 & 0\tabularnewline
+1999 & 1 & Kreis 1 & 1\tabularnewline
+1999 & 1 & Kreis 1 & 2\tabularnewline
+1999 & 2 & Kreis 2 & 0\tabularnewline
+1999 & 2 & Kreis 2 & 1\tabularnewline
+1999 & 2 & Kreis 2 & 2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}rlrrr@{}}
+\toprule
+\begin{minipage}[b]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+SteuerTarifSort\strut
+\end{minipage} &
+\begin{minipage}[b]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+SteuerTarifLang\strut
+\end{minipage} &
+\begin{minipage}[b]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+SteuerVermoegen\_p50\strut
+\end{minipage} &
+\begin{minipage}[b]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+SteuerVermoegen\_p25\strut
+\end{minipage} &
+\begin{minipage}[b]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+SteuerVermoegen\_p75\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+Grundtarif\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+23.0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+174\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+1\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+Verheiratetentarif\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+182.0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+22\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+711\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+2\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+Einelternfamilientarif\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+27.5\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+283\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+Grundtarif\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+37.0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+3\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+186\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+1\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+Verheiratetentarif\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+148.0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+33\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+458\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.16}}\raggedleft
+2\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.23}}\raggedright
+Einelternfamilientarif\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+7.0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+0\strut
+\end{minipage} &
+\begin{minipage}[t]{(\columnwidth - 4\tabcolsep) * \real{0.20}}\raggedleft
+61\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Examinating the previous showed data revealed that the data set contains
+a lot of irrelevant information. For example, the columns
+\emph{``KreisSort''} and \emph{``KreisLang''} are redundant, since the
+first in simply the encoding of the second in number. The same applies
+for the the columns \emph{``SteuerTarifSort''} and
+\emph{``SteuerTarifLang''}, since the first here again, is the encoding
+of the second in number. However, the columns \emph{``KreisLang''} and
+\emph{``SteuerTarifLang''} are redundant and therefore, droped. For
+practical reasons the columns \emph{``SteuerVermoegen\_p25''} and
+\emph{``SteuerVermoegen\_p75''} were droped as well.\\
+Moreover, the columns \emph{``SteuerTarifSort''} and
+\emph{``KreisSort''} are converted to factors, since those columns are
+automatically defined as integer number. Additionally, the names of the
+columns do not correspond with the previous data set and therefore, we
+have to change the following:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Original Column Name & New Column Name\tabularnewline
+\midrule
+\endhead
+KreisSort & DistrictNumber\tabularnewline
+SteuerJahr & Year\tabularnewline
+SteuerVermoegen\_p50 & Wealth\tabularnewline
+SteuerTarifSort & Category\tabularnewline
+\bottomrule
+\end{longtable}
+
+Finally, after all modifications, the data set looks as follows:
+
+\begin{longtable}[]{@{}rllr@{}}
+\caption{Final data set: Distribution wealth tax per category, district
+and year}\tabularnewline
+\toprule
+Year & DistrictNumber & TaxCategory & Wealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictNumber & TaxCategory & Wealth\tabularnewline
+\midrule
+\endhead
+1999 & 1 & 0 & 23.0\tabularnewline
+1999 & 1 & 1 & 182.0\tabularnewline
+1999 & 1 & 2 & 27.5\tabularnewline
+1999 & 2 & 0 & 37.0\tabularnewline
+1999 & 2 & 1 & 148.0\tabularnewline
+1999 & 2 & 2 & 7.0\tabularnewline
+\bottomrule
+\end{longtable}
+
+The next graph shows the distribution of wealth per year, tax category
+and district in Zurich.
+
+\includegraphics{report_files/figure-latex/plot_wealth-1.pdf}
+
+The previous graph shows the distribution of wealth by district, year
+and tax category. Since the ordinate is scaled for all tax categories
+with the same values, it is clearly visible the difference of
+accumulated wealth between the districts across all and those
+differences seems to have a clear trend in increasing. The biggest
+differences between districts can be see in the \emph{family category}
+subgraph. The highest values have been observed for district 7 and the
+lowest values for district 12. District 7, however, has the highest
+values among all tax categories. District 12 shows as well across all
+categories the lowest values of accumulated as well.
+
+\hypertarget{data-set-4-income-distribution-of-the-population-in-zuxfcrich-by-district}{%
+\subsection{Data set 4: Income distribution of the population in Zürich,
+by
+district}\label{data-set-4-income-distribution-of-the-population-in-zuxfcrich-by-district}}
+
+The following data set of dimensions 756x8 variables reflects how the
+income distribution in absolute terms changed over time per district and
+per tax class. The following table shows the accumulated income
+distribution across all districts of the city of Zürich between the
+years 1999 and 2019.
+
+\begin{longtable}[]{@{}rrlr@{}}
+\caption{Original data set: Distribution income tax per category,
+district and year}\tabularnewline
+\toprule
+SteuerJahr & KreisSort & KreisLang & SteuerTarifSort\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+SteuerJahr & KreisSort & KreisLang & SteuerTarifSort\tabularnewline
+\midrule
+\endhead
+1999 & 1 & Kreis 1 & 0\tabularnewline
+1999 & 1 & Kreis 1 & 1\tabularnewline
+1999 & 1 & Kreis 1 & 2\tabularnewline
+1999 & 2 & Kreis 2 & 0\tabularnewline
+1999 & 2 & Kreis 2 & 1\tabularnewline
+1999 & 2 & Kreis 2 & 2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+SteuerTarifLang & SteuerEinkommen\_p50 & SteuerEinkommen\_p25 &
+SteuerEinkommen\_p75\tabularnewline
+\midrule
+\endhead
+Grundtarif & 37.8 & 17.40 & 64.80\tabularnewline
+Verheiratetentarif & 83.4 & 52.00 & 130.20\tabularnewline
+Einelternfamilientarif & 46.7 & 26.05 & 87.05\tabularnewline
+Grundtarif & 37.9 & 19.90 & 58.20\tabularnewline
+Verheiratetentarif & 69.7 & 49.10 & 101.40\tabularnewline
+Einelternfamilientarif & 39.2 & 21.90 & 58.90\tabularnewline
+\bottomrule
+\end{longtable}
+
+Examinating the previous showed data revealed that the data set contains
+a lot of irrelevant information. For example, the columns
+\emph{``KreisSort''} and \emph{``KreisLang''} are redundant, since the
+first in simply the encoding of the second in number. The same applies
+for the the columns \emph{``SteuerTarifSort''} and
+\emph{``SteuerTarifLang''}, since the first column, here again, is the
+encoding of the second in number. However, the columns
+\emph{``KreisLang''} and \emph{``SteuerTarifLang''} are redundant and
+therefore, droped. For practical reasons the columns
+\emph{``SteuerEinkommen\_p25''} and \emph{``SteuerEinkommen\_p75''} were
+droped as well.\\
+Moreover, the columns \emph{``SteuerTarifSort''} and
+\emph{``KreisSort''} are converted to factors, since those columns are
+automatically defined as integer number. Additionally, the names of the
+columns do not correspond with the previous data set and therefore, we
+have to change the following:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Original Column Name & New Column Name\tabularnewline
+\midrule
+\endhead
+KreisSort & DistrictNumber\tabularnewline
+SteuerJahr & Year\tabularnewline
+SteuerEinkommen\_p50 & Income\tabularnewline
+SteuerTarifSort & Category\tabularnewline
+\bottomrule
+\end{longtable}
+
+Finally, after all modifications, the data set looks as follows:
+
+\begin{longtable}[]{@{}rllr@{}}
+\caption{Final data set: Distribution income tax per category, district
+and year}\tabularnewline
+\toprule
+Year & DistrictNumber & TaxCategory & Income\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictNumber & TaxCategory & Income\tabularnewline
+\midrule
+\endhead
+1999 & 1 & 0 & 37.8\tabularnewline
+1999 & 1 & 1 & 83.4\tabularnewline
+1999 & 1 & 2 & 46.7\tabularnewline
+1999 & 2 & 0 & 37.9\tabularnewline
+1999 & 2 & 1 & 69.7\tabularnewline
+1999 & 2 & 2 & 39.2\tabularnewline
+\bottomrule
+\end{longtable}
+
+The next graph shows the distribution of income per year, tax category
+and district in Zurich.
+
+\includegraphics{report_files/figure-latex/plot_income-1.pdf}
+
+The previous graph shows the distribution of income by district, year
+and tax category. Since the ordinate is scaled for all tax categories
+with the same values, it is clearly visible the difference of
+accumulated income between the districts across all and those
+differences seems to have a clear trend in increasing. The biggest
+differences between districts can be see in the \emph{family category}
+subgraph. The highest values have been observed for district 7 and the
+lowest values for district 12. District 7, however, has the highest
+values among all tax categories. District 12 shows as well across all
+categories the lowest values of accumulated as well.
+
+\newpage
+
+\hypertarget{combine-wealth-and-income-data}{%
+\subsection{Combine wealth and income
+data}\label{combine-wealth-and-income-data}}
+
+The aim of this part is to combine the income and wealth data into one
+data frame. As a first step, both data frames are combine using the
+\emph{merge()} function. The merged data sets of income and wealth data,
+contains the income data and wealth data per district and tax category
+combined.
+
+\begin{longtable}[]{@{}rllrr@{}}
+\caption{Merged income and wealth data}\tabularnewline
+\toprule
+Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
+\midrule
+\endhead
+1999 & 1 & 0 & 37.8 & 23.0\tabularnewline
+1999 & 1 & 1 & 83.4 & 182.0\tabularnewline
+1999 & 1 & 2 & 46.7 & 27.5\tabularnewline
+1999 & 10 & 0 & 38.5 & 34.0\tabularnewline
+1999 & 10 & 1 & 69.0 & 124.0\tabularnewline
+1999 & 10 & 2 & 37.7 & 11.0\tabularnewline
+\bottomrule
+\end{longtable}
+
+Thereafter, the district name has to be modified in order to match if
+the data presented in sections concerning
+\emph{\protect\hyperlink{Dataux5cux2520setux5cux25201:ux5cux2520Turnoutux5cux2520atux5cux2520theux5cux2520cityux5cux2520andux5cux2520municipalux5cux2520councilux5cux2520electionsux5cux2520sinceux5cux25202006ux2cux5cux2520byux5cux2520cityux5cux2520district.}{Data
+set 1}} and
+\emph{\protect\hyperlink{Dataux5cux2520setux5cux25202:ux5cux2520Municipalux5cux2520electionsux5cux2520voteux5cux2520shareux2cux5cux2520byux5cux2520partyux5cux2520andux5cux2520electoralux5cux2520districtux5cux2520sinceux5cux25201913.}{Data
+set 2}}: The name of the districts corresponds to the prefix
+\emph{``Kreis''} followed by \emph{" + "} and the corresponding number.
+In the case of the \emph{wealth} and \emph{income} data frames, those
+values have to be transformed and combined as the following
+correspondence tables shows:
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Correspondence table between district names and district
+numbers}\tabularnewline
+\toprule
+Number & Name\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Number & Name\tabularnewline
+\midrule
+\endhead
+1 & Kreis 1 + 2\tabularnewline
+2 & Kreis 1 + 2\tabularnewline
+3 & Kreis 3\tabularnewline
+4 & Kreis 4 + 5\tabularnewline
+5 & Kreis 4 + 5\tabularnewline
+6 & Kreis 6\tabularnewline
+7 & Kreis 7 + 8\tabularnewline
+8 & Kreis 7 + 8\tabularnewline
+9 & Kreis 9\tabularnewline
+10 & Kreis 10\tabularnewline
+11 & Kreis 11\tabularnewline
+12 & Kreis 12\tabularnewline
+\bottomrule
+\end{longtable}
+
+Thereafter, several transformations have to be done as follows in order
+to transform the data into a mergable format:\\
+- Pivot to a longer format the tables and combine the tax values\\
+- Group by year, district name and tax type\\
+- Sum the values amount all categories within one district\\
+- Pivot to wide format again to averaged values
+
+After the step-by-step implementation of those transformation steps one
+gets the following data frame:
+
+\begin{longtable}[]{@{}rlrr@{}}
+\caption{Final wealth and income data frame per district and
+year}\tabularnewline
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endhead
+1999 & Kreis 1 + 2 & 314.70 & 424.5\tabularnewline
+1999 & Kreis 3 & 124.75 & 76.0\tabularnewline
+1999 & Kreis 4 + 5 & 228.10 & 37.0\tabularnewline
+1999 & Kreis 6 & 146.00 & 200.0\tabularnewline
+1999 & Kreis 7 + 8 & 337.55 & 636.5\tabularnewline
+1999 & Kreis 9 & 127.15 & 108.0\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{education-data}{%
+\subsection{Education data}\label{education-data}}
+
+The following data set contains 39x5 variables on type of education and
+year of the complete city of Zürich. This data set allows us to try to
+infer the change in education per type in the city of Zürich and
+interpolate the change of education type on a district respectively on a
+neighborhood level.
+
+\begin{longtable}[]{@{}rlrrr@{}}
+\caption{Original data set: Education distribution per category and
+year}\tabularnewline
+\toprule
+Jahr & Bildungsstand & AntBev & untAntBevKI & obAntBevKI\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Jahr & Bildungsstand & AntBev & untAntBevKI & obAntBevKI\tabularnewline
+\midrule
+\endhead
+1970 & Obligatorische Schule & 32.0 & NA & NA\tabularnewline
+1970 & Sekundarstufe II & 58.4 & NA & NA\tabularnewline
+1970 & Tertiärstufe & 9.7 & NA & NA\tabularnewline
+1980 & Obligatorische Schule & 33.9 & NA & NA\tabularnewline
+1980 & Sekundarstufe II & 52.5 & NA & NA\tabularnewline
+1980 & Tertiärstufe & 13.6 & NA & NA\tabularnewline
+\bottomrule
+\end{longtable}
+
+The following graphs shows the change of education in the city of Zürich
+between the year 1970 and 2018.
+
+\includegraphics{report_files/figure-latex/plot_education-1.pdf}
+
+The previous graph shows, that the number of inhabitants without an
+academical degree is decreasing in the course of time since 1970 in the
+City of Zürich, while the number of persons having a university degree
+is increasing. First, the values of the previous data frame have to be
+re-arranged using the \emph{pivot\_wide()} and the names of the
+education type are renamed to match the correspondence table
+
+\begin{longtable}[]{@{}rrrrr@{}}
+\caption{Pivoted data set: Education distribution per category and
+year}\tabularnewline
+\toprule
+Year & PrimarySchool & SecondarySchool & AcademiaDegree &
+DeltaYear\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & PrimarySchool & SecondarySchool & AcademiaDegree &
+DeltaYear\tabularnewline
+\midrule
+\endhead
+1970 & 32.0 & 58.4 & 9.7 & 0\tabularnewline
+1980 & 33.9 & 52.5 & 13.6 & 10\tabularnewline
+1990 & 31.2 & 53.5 & 15.3 & 20\tabularnewline
+2000 & 27.9 & 45.9 & 26.2 & 30\tabularnewline
+2010 & 21.1 & 39.6 & 39.4 & 40\tabularnewline
+2011 & 20.4 & 38.4 & 41.2 & 41\tabularnewline
+\bottomrule
+\end{longtable}
+
+In order to be able to reproduce this phenomena in the previous data
+set, the parameters of theses changes is going to calculated using the
+\emph{lm()} function. The used formula is the following:
+
+\[N_{AntBev} = c + \frac{\Delta d_{i}}{\Delta t} \cdot t \]
+
+Applying the previous showed formula to the other data set one gets the
+following values
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Coefficients of the linear model depending on the education
+type}\tabularnewline
+\toprule
+& PrimarySchool & SecondarySchool & AcademiaDegree\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+& PrimarySchool & SecondarySchool & AcademiaDegree\tabularnewline
+\midrule
+\endhead
+(Intercept) & 36.0127064 & 60.240920 & 3.7915859\tabularnewline
+DeltaYear & -0.3777745 & -0.552921 & 0.9300644\tabularnewline
+\bottomrule
+\end{longtable}
+
+The previous table shows the coefficients of the linear model of each
+education type. Before further transformation, we load a further data
+frame. The data set of dimensions 138x6 variables reflects how the
+education of the inhabitants changed over time per district and per
+education class. The following table shows the proportion of education
+per districts of the city of Zürich for the year 2021. The data set is
+updated on a yearly basis.
+
+\begin{longtable}[]{@{}lllrrr@{}}
+\caption{Original data set: Education distribution per category and
+district for the year 2021}\tabularnewline
+\toprule
+RaumSort & RaumLang & Bildungsstand & AntBev & untAntBevKI &
+obAntBevKI\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+RaumSort & RaumLang & Bildungsstand & AntBev & untAntBevKI &
+obAntBevKI\tabularnewline
+\midrule
+\endhead
+10 & Kreis 1 & 1 & 9.8 & 6.7 & 12.9\tabularnewline
+10 & Kreis 1 & 2 & 26.8 & 22.2 & 31.4\tabularnewline
+10 & Kreis 1 & 3 & 63.4 & 58.4 & 68.4\tabularnewline
+11 & Rathaus & 1 & 9.9 & 5.9 & 13.9\tabularnewline
+11 & Rathaus & 2 & 27.7 & 21.8 & 33.6\tabularnewline
+11 & Rathaus & 3 & 62.3 & 55.9 & 68.7\tabularnewline
+\bottomrule
+\end{longtable}
+
+The column \emph{``RaumSort''} encodes the district number and
+corresponding neighborhood within the district. The last digit describes
+the neighborhood and the first one (or two) digit the district number.
+The column \emph{``RaumLang''} describes the district and neighborhood
+name and the column \emph{``Bildungsstand''} describes the type of
+education as follows:
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Education ecoding: Education number key vs.~meaning in
+words}\tabularnewline
+\toprule
+EducationNumber & Meaning\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+EducationNumber & Meaning\tabularnewline
+\midrule
+\endhead
+1 & Primary school\tabularnewline
+2 & Secondary school\tabularnewline
+3 & Academia degree\tabularnewline
+\bottomrule
+\end{longtable}
+
+Where type \emph{1} describes the nine complete year of the mandatory
+school program, \emph{2} describes either a professional degree or
+high-school diploma and \emph{3} an academical degree (Bachelor's degree
+and higher). The columns \emph{``untAntBevKI''} and
+\emph{``obAntBevKI''} describes the lower and upper portion of the
+confidence interval of the values per education. Summarzing, the data
+frame is going to be updated as follows:\\
+- \emph{``Bildungsstand''} is update with the meaning as described in
+the previous table\\
+- Columns \emph{``untAntBevKI''} and \emph{``obAntBevKI''} are droped\\
+- Column \emph{``Year''} is added with value \emph{2021}\\
+- Column \emph{``RaumSort''} is transformed to column
+\emph{``DistrictNumer''}\\
+- District designation adapted\\
+- District summarized according to voting data frames
+
+Those transformations steps leads to the following data frame:
+
+\begin{longtable}[]{@{}rlrrr@{}}
+\caption{Transformed data frame for education in year
+2021}\tabularnewline
+\toprule
+Year & DistrictName & PrimarySchool & SecondarySchool &
+AcademiaDegree\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & PrimarySchool & SecondarySchool &
+AcademiaDegree\tabularnewline
+\midrule
+\endhead
+2021 & Kreis 1 + 2 & 12.5 & 29.7 & 57.8\tabularnewline
+2021 & Kreis 10 & 12.4 & 33.7 & 54.0\tabularnewline
+2021 & Kreis 11 & 20.3 & 35.5 & 44.2\tabularnewline
+2021 & Kreis 12 & 29.2 & 39.6 & 31.1\tabularnewline
+2021 & Kreis 3 & 17.2 & 31.6 & 51.2\tabularnewline
+2021 & Kreis 4 + 5 & 13.9 & 26.9 & 59.3\tabularnewline
+2021 & Kreis 6 & 10.0 & 25.4 & 64.6\tabularnewline
+2021 & Kreis 7 + 8 & 8.4 & 26.4 & 65.2\tabularnewline
+2021 & Kreis 9 & 20.0 & 38.6 & 41.5\tabularnewline
+\bottomrule
+\end{longtable}
+
+The previous table shows the transformed data for the year 2021. Now,
+taking into account the previously calculated
+\emph{\href{tab:pivot_education1}{lm coefficients}} one can extrapolate
+values for the missing years of the data frame.
+
+\pagebreak
 
 \hypertarget{merging-data}{%
-\subsection{Merging Data}\label{merging-data}}
+\section{Merging Data}\label{merging-data}}
+
+\pagebreak
 
 \hypertarget{data-visualization}{%
-\subsection{Data Visualization}\label{data-visualization}}
+\section{Data Visualization}\label{data-visualization}}
+
+\pagebreak
 
 \hypertarget{fit-model}{%
-\subsection{Fit Model}\label{fit-model}}
+\section{Fit Model}\label{fit-model}}
+
+\pagebreak
 
 \hypertarget{chapter-of-choice-tbd}{%
-\subsection{Chapter of Choice TBD}\label{chapter-of-choice-tbd}}
+\section{Chapter of Choice TBD}\label{chapter-of-choice-tbd}}
+
+\pagebreak
 
 \hypertarget{references}{%
 \section{References}\label{references}}

@@ -42,7 +42,7 @@ library(stringr)
 ```
 
 
-# Introduction. 
+# Introduction 
 
 ## Project goal
 The goal is to understand the dynamics in the performance of each part in each electoral district of the city. The period of interest is 2006-2018. 
@@ -67,7 +67,7 @@ The data set of dimensions 136x7 reflects how many people from each city distric
 
 ```{r Beteiligung_am_Urnengang 1, echo=FALSE, results='asis', include = TRUE}
 #d.gen <- read.table("https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_btg_urnengang_quartier_od7005/download/POL700OD7005.csv", header = TRUE, sep = ",")
-d.gen <- read.table("./data/POL700OD7005.csv", header = TRUE, sep = ",")
+d.gen <- read.table("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp/Beteiligung__nachStadtquartier.csv", header = TRUE, sep = ",")
 kable(d.gen[1:6, ], caption = "Original data set: Turnout in the city and municipal council elections since 2006, by city district")
 
 ```
@@ -143,7 +143,6 @@ df_fin <- df_fin %>%
     Year = Jahr
     )
 
-library(plyr)
 df_fin <- arrange(df_fin,desc(Year),DistrictName)
 head(df_fin, 10)
 
@@ -223,8 +222,7 @@ parties$DistrictName  <- factor(parties$DistrictName, levels = c("Kreis 1 + 2",
                                                       "Kreis 11", "Kreis 12" ))
 
 #Transform the table into wide format.
-library(tidyr)
-parties <- pivot_wider(parties, 
+parties <- tidyr::pivot_wider(parties, 
                                    names_from = "Party",
                                    values_from = "Result")
 parties <- na.omit(parties)
@@ -241,7 +239,7 @@ kable (parties[1:8, ], caption = "Final dataset: Municipal elections vote share,
 
 The visualisation shows that parties have been demonstrating roughly the same result since 2006. Kreis 7+8 seems to be the bastion of FDP. Most active supporters of AL-Alternative Liste live in Kreis 4+5. Electoral districts Kreis 3, Kreis 4+5, Kreis 6 and Kreis 10 deliver a larger amount of votes to SP than the citizens of other districts. Voters in Kreis 7+8 do not like to vote for socialists. A curious phenomenon can be observed when it comes to the green parties - GLP and GPS. They seem to grow at expense of other parties: FDP and SP, respectively. 
 
-```{r plot Parties in Districts, echo=FALSE, warning=FALSE, fig.width=12,fig.height=7}
+```{r plot Parties in Districts, warning=FALSE, include = TRUE}
 parties %>% 
   gather(Party, Result, -c(Year, DistrictName)) %>% 
   ggplot(aes(reorder(DistrictName, Year), Result)) +
@@ -256,8 +254,8 @@ parties %>%
   labs(title = "Party results by district and year")
 ```
 
-The dataset was merged with the Dataset 1:
-```{r Municipal elections vote share 4, echo=FALSE, results='asis'}
+The data set was merged with the Dataset 1:
+```{r Municipal elections vote share 4, echo=FALSE, results='asis', , include = TRUE}
 kable (df_3[1:8, ], caption = "Merged dataset: Municipal elections turnout and vote share by party, 2006-2018.")
 ```
 \pagebreak
@@ -296,7 +294,7 @@ VermoegenSteuerKreis$KreisSort <- VermoegenSteuerKreis$KreisSort %>% as.factor()
 
 VermoegenSteuerKreis <- VermoegenSteuerKreis[,! names(VermoegenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang","SteuerVermoegen_p25","SteuerVermoegen_p75")]
 VermoegenSteuerKreis <- VermoegenSteuerKreis %>%
-  rename(
+  dplyr::rename(
     DistrictNumber = KreisSort,
     Year = SteuerJahr,
     Wealth = SteuerVermoegen_p50,
@@ -363,7 +361,7 @@ EinkommenSteuerKreis$KreisSort <- EinkommenSteuerKreis$KreisSort %>% as.factor()
 
 EinkommenSteuerKreis <- EinkommenSteuerKreis[,! names(EinkommenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang","SteuerEinkommen_p25","SteuerEinkommen_p75")]
 EinkommenSteuerKreis <- EinkommenSteuerKreis %>%
-  rename(
+  dplyr::rename(
     DistrictNumber = KreisSort,
     Year = SteuerJahr,
     Income = SteuerEinkommen_p50,
@@ -441,7 +439,7 @@ EducationYearPivot <- EducationYear %>%
   pivot_wider(names_from = Bildungsstand,
               values_from = AntBev,
               values_fill = 0) %>%
-  rename('Year' = 'Jahr') %>%
+  dplyr::rename('Year' = 'Jahr') %>%
   mutate(DeltaYear = Year - 1970)
 
 kable(EducationYearPivot %>% head(), caption = "Pivoted data set: Education distribution per category and year")
@@ -527,7 +525,7 @@ EducationDistrictPivot <- EducationDistrict %>%
     '10' = "Kreis 10",
     '11' = "Kreis 11", 
     '12' = "Kreis 12")) %>%
-  rename(DistrictName = DistrictNumber) %>%
+  dplyr::rename(DistrictName = DistrictNumber) %>%
   group_by(DistrictName) %>%
   summarise_at(c("PrimarySchool","SecondarySchool","AcademiaDegree"), ~round(mean(.),1)) %>%
   mutate(Year = 2021) %>%
@@ -541,7 +539,7 @@ The previous table shows the transformed data for the year 2021. Now, taking int
 \pagebreak
 # Merging Data
 ## Combine wealth and income data  
-The aim of this part is to combine the income and wealth data into one data frame. As a first step, both data frames are combine using the _merge()_ function. The merged data sets of income and wealth data, contains the income data and wealth data per district and tax category combined. 
+The aim of this part is to combine all data sets into one. As a first step, data frames 3 and 4 are combine using the _merge()_ function. The merged data sets of income and wealth data, contains the income data and wealth data per district and tax category combined. 
 
 ```{r merging_income_wealth, echo = FALSE, include = TRUE}
 # Merge the two frames and drop redundant column KreisLang
@@ -576,7 +574,7 @@ Thereafter, several transformations have to be done as follows in order to trans
 - Sum the values amount all categories within one district  
 - Pivot to wide format again to averaged values  
 
-After the step-by-step implementation of those transformation steps one gets the following data frame: 
+After the step-by-step implementation of the transformation steps one gets the following data frame: 
 
 ```{r transformations_wealth_income, echo = FALSE, include = TRUE}
 # Transformations
@@ -604,15 +602,82 @@ EinkommenVermoegenSteuerKreis <- EinkommenVermoegenSteuerKreis %>%
 
 kable(EinkommenVermoegenSteuerKreis %>% head(), caption = "Final wealth and income data frame per district and year")
 ```
+## Merge all data sets
+Finally, all data sets are combined into one: 
+
+```{r final_dataset, echo = FALSE, include = TRUE}
+# Transformations
+EinkommenVermoegenSteuerKreis <- EinkommenVermoegenSteuerKreis[EinkommenVermoegenSteuerKreis$Year %in% c("2006", "2010", "2014", "2018"), ]
+EinkommenVermoegenSteuerKreis$Year <- as.factor(EinkommenVermoegenSteuerKreis$Year)
+df_final <- EinkommenVermoegenSteuerKreis %>% inner_join(df_3)
+kable(df_final[1:6,1:4], caption = "Final dataset")
+kable(df_final[1:6,5:13])
+```
+ 
+
+\pagebreak
+# Chapter of choice - Maps with ggplot and sf
+As a chapter of choice, we have explored creation of maps in ggplot and sf. 
+
+```{r Maps 1, echo=FALSE, include=FALSE}
+library(ggplot2)
+library(sf)
+library(osmdata)
+library(ggmap)
+## Load files with map information
+zh <- st_read("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp/map_data/stzh.adm_zaehlkreise_a.shp") 
+zh <- zh %>%
+  dplyr::mutate(bezeichnun = recode(bezeichnun, 
+                             "3" = "Kreis 3", 
+                             "6" = "Kreis 6",
+                             "9" = "Kreis 9","10" = "Kreis 10",
+                             "11" = "Kreis 11",
+                             "12" = "Kreis 12",
+                             '1 und 2' = 'Kreis 1 + 2', 
+                               '4 und 5' = 'Kreis 4 + 5',
+                               '7 und 8' ='Kreis 7 + 8'))
+
+zh <- zh %>%
+  mutate(kuerzel = recode(kuerzel, 
+                             '1 und 2' = '1+2', 
+                             '4 und 5' = '4+5',
+                             '7 und 8' ='7+8'))
+
+zh$bezeichnun  <- factor(zh$bezeichnun, levels = c("Kreis 1 + 2","Kreis 3", 
+                                                      "Kreis 4 + 5", "Kreis 6",
+                                                      'Kreis 7 + 8', "Kreis 9", 
+                                                   "Kreis 10", 
+                                                      "Kreis 11", "Kreis 12" ))
+zh <- zh[order(zh$bezeichnun),] 
+
+zh <- zh %>% 
+  dplyr::rename(
+    DistrictName = bezeichnun
+    )
+
+results <- df_final[df_final$Year %in% c("2018"), ]
+
+zh <- zh %>% dplyr::inner_join(results)
+head(zh, 10)
+```
+
+```{r plot map, include = TRUE}
+dim(zh)
+ggplot(data = zh) +
+  geom_sf(aes(fill = SP)) +
+  scale_fill_viridis_c(trans = "sqrt") +
+  geom_sf_label(aes(label = kuerzel), colour = "white") +
+  geom_sf_text(aes(label = kuerzel), colour = "black", size=2,family="sans") +
+  labs(fill = "2018 SP results (%)")
+
+```
+
 
 \pagebreak
 # Data Visualization  
 
 \pagebreak
-# Fit Model  
-
-\pagebreak
-# Chapter of Choice TBD  
+# Fit Model 
 
 \pagebreak
 # References 

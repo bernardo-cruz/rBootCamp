@@ -1,4 +1,0 @@
-https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_btg_urnengang_quartier_od7005/download/POL700OD7005.csv
-https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_stimmant_seit1913_od7000/download/POL700OD7000.csv
-https://data.stadt-zuerich.ch/dataset/fd_median_vermoegen_kreis_od1008/download/WIR100OD1008.csv
-https://data.stadt-zuerich.ch/dataset/fd_median_einkommen_kreis_od1007/download/WIR100OD1007.csv

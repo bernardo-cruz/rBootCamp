@@ -38,7 +38,7 @@
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
   pdftitle={R-Bootcamp Report},
-  pdfauthor={Bernardo Freire Barboza da Cruz; Leonid Gavrilyuk},
+  pdfauthor={Leonid Gavrilyuk; Bernardo Freire Barboza da Cruz},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
@@ -75,11 +75,11 @@
 \fi
 
 \title{R-Bootcamp Report}
-\author{Bernardo Freire Barboza da Cruz\footnote{Hochschule Luzern,
-  \href{mailto:bernardo.dacruz@stud.hslu.ch}{\nolinkurl{bernardo.dacruz@stud.hslu.ch}}} \and Leonid
-Gavrilyuk\footnote{Hochschule Luzern,
-  \href{mailto:leonid.gavrilyuk@stud.hslu.ch}{\nolinkurl{leonid.gavrilyuk@stud.hslu.ch}}}}
-\date{18 February, 2022}
+\author{Leonid Gavrilyuk\footnote{Hochschule Luzern,
+  \href{mailto:leonid.gavrilyuk@stud.hslu.ch}{\nolinkurl{leonid.gavrilyuk@stud.hslu.ch}}} \and Bernardo
+Freire Barboza da Cruz\footnote{Hochschule Luzern,
+  \href{mailto:bernardo.dacruz@stud.hslu.ch}{\nolinkurl{bernardo.dacruz@stud.hslu.ch}}}}
+\date{21 February, 2022}
 
 \begin{document}
 \maketitle
@@ -493,8 +493,11 @@ of the second in number. However, the columns \emph{``KreisLang''} and
 \emph{``SteuerTarifLang''} are redundant and therefore, droped. For
 practical reasons the columns \emph{``SteuerVermoegen\_p25''} and
 \emph{``SteuerVermoegen\_p75''} were droped as well.\\
-Additionally, the names of the columns do not correspond with the
-previous data set and therefore, we have to change the following:
+Moreover, the columns \emph{``SteuerTarifSort''} and
+\emph{``KreisSort''} are converted to factors, since those columns are
+automatically defined as integer number. Additionally, the names of the
+columns do not correspond with the previous data set and therefore, we
+have to change the following:
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -510,780 +513,15 @@ SteuerTarifSort & Category\tabularnewline
 
 Finally, after all modifications, the data set looks as follows:
 
-\begin{longtable}[]{@{}rrrr@{}}
+\begin{longtable}[]{@{}rllr@{}}
 \caption{Final data set: Distribution wealth tax per category, district
 and year}\tabularnewline
 \toprule
-Year & DistrictNumber & Category & Wealth\tabularnewline
+Year & DistrictNumber & TaxCategory & Wealth\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Year & DistrictNumber & Category & Wealth\tabularnewline
-\midrule
-\endhead
-1999 & 1 & 0 & 23.0\tabularnewline
-1999 & 1 & 1 & 182.0\tabularnewline
-1999 & 1 & 2 & 27.5\tabularnewline
-1999 & 2 & 0 & 37.0\tabularnewline
-1999 & 2 & 1 & 148.0\tabularnewline
-1999 & 2 & 2 & 7.0\tabularnewline
-1999 & 3 & 0 & 18.0\tabularnewline
-1999 & 3 & 1 & 58.0\tabularnewline
-1999 & 3 & 2 & 0.0\tabularnewline
-1999 & 4 & 0 & 6.0\tabularnewline
-1999 & 4 & 1 & 9.0\tabularnewline
-1999 & 4 & 2 & 0.0\tabularnewline
-1999 & 5 & 0 & 7.0\tabularnewline
-1999 & 5 & 1 & 15.0\tabularnewline
-1999 & 5 & 2 & 0.0\tabularnewline
-1999 & 6 & 0 & 38.0\tabularnewline
-1999 & 6 & 1 & 145.0\tabularnewline
-1999 & 6 & 2 & 17.0\tabularnewline
-1999 & 7 & 0 & 57.0\tabularnewline
-1999 & 7 & 1 & 307.0\tabularnewline
-1999 & 7 & 2 & 35.0\tabularnewline
-1999 & 8 & 0 & 35.0\tabularnewline
-1999 & 8 & 1 & 184.5\tabularnewline
-1999 & 8 & 2 & 18.0\tabularnewline
-1999 & 9 & 0 & 23.0\tabularnewline
-1999 & 9 & 1 & 84.0\tabularnewline
-1999 & 9 & 2 & 1.0\tabularnewline
-1999 & 10 & 0 & 34.0\tabularnewline
-1999 & 10 & 1 & 124.0\tabularnewline
-1999 & 10 & 2 & 11.0\tabularnewline
-1999 & 11 & 0 & 19.0\tabularnewline
-1999 & 11 & 1 & 77.0\tabularnewline
-1999 & 11 & 2 & 3.0\tabularnewline
-1999 & 12 & 0 & 16.0\tabularnewline
-1999 & 12 & 1 & 49.0\tabularnewline
-1999 & 12 & 2 & 0.0\tabularnewline
-2000 & 1 & 0 & 26.0\tabularnewline
-2000 & 1 & 1 & 187.5\tabularnewline
-2000 & 1 & 2 & 30.0\tabularnewline
-2000 & 2 & 0 & 38.0\tabularnewline
-2000 & 2 & 1 & 149.0\tabularnewline
-2000 & 2 & 2 & 8.0\tabularnewline
-2000 & 3 & 0 & 19.0\tabularnewline
-2000 & 3 & 1 & 55.0\tabularnewline
-2000 & 3 & 2 & 1.0\tabularnewline
-2000 & 4 & 0 & 7.0\tabularnewline
-2000 & 4 & 1 & 9.0\tabularnewline
-2000 & 4 & 2 & 0.0\tabularnewline
-2000 & 5 & 0 & 9.0\tabularnewline
-2000 & 5 & 1 & 19.0\tabularnewline
-2000 & 5 & 2 & 0.0\tabularnewline
-2000 & 6 & 0 & 38.0\tabularnewline
-2000 & 6 & 1 & 145.0\tabularnewline
-2000 & 6 & 2 & 21.0\tabularnewline
-2000 & 7 & 0 & 58.0\tabularnewline
-2000 & 7 & 1 & 323.0\tabularnewline
-2000 & 7 & 2 & 34.0\tabularnewline
-2000 & 8 & 0 & 38.0\tabularnewline
-2000 & 8 & 1 & 194.5\tabularnewline
-2000 & 8 & 2 & 27.0\tabularnewline
-2000 & 9 & 0 & 22.0\tabularnewline
-2000 & 9 & 1 & 81.0\tabularnewline
-2000 & 9 & 2 & 2.0\tabularnewline
-2000 & 10 & 0 & 33.0\tabularnewline
-2000 & 10 & 1 & 131.0\tabularnewline
-2000 & 10 & 2 & 10.0\tabularnewline
-2000 & 11 & 0 & 18.0\tabularnewline
-2000 & 11 & 1 & 74.0\tabularnewline
-2000 & 11 & 2 & 3.0\tabularnewline
-2000 & 12 & 0 & 15.0\tabularnewline
-2000 & 12 & 1 & 49.0\tabularnewline
-2000 & 12 & 2 & 0.0\tabularnewline
-2001 & 1 & 0 & 27.0\tabularnewline
-2001 & 1 & 1 & 183.0\tabularnewline
-2001 & 1 & 2 & 43.5\tabularnewline
-2001 & 2 & 0 & 38.0\tabularnewline
-2001 & 2 & 1 & 152.0\tabularnewline
-2001 & 2 & 2 & 10.0\tabularnewline
-2001 & 3 & 0 & 20.0\tabularnewline
-2001 & 3 & 1 & 56.0\tabularnewline
-2001 & 3 & 2 & 3.0\tabularnewline
-2001 & 4 & 0 & 8.0\tabularnewline
-2001 & 4 & 1 & 8.0\tabularnewline
-2001 & 4 & 2 & 0.0\tabularnewline
-2001 & 5 & 0 & 10.0\tabularnewline
-2001 & 5 & 1 & 19.0\tabularnewline
-2001 & 5 & 2 & 0.0\tabularnewline
-2001 & 6 & 0 & 39.0\tabularnewline
-2001 & 6 & 1 & 148.0\tabularnewline
-2001 & 6 & 2 & 25.0\tabularnewline
-2001 & 7 & 0 & 61.5\tabularnewline
-2001 & 7 & 1 & 318.0\tabularnewline
-2001 & 7 & 2 & 34.5\tabularnewline
-2001 & 8 & 0 & 40.5\tabularnewline
-2001 & 8 & 1 & 200.0\tabularnewline
-2001 & 8 & 2 & 29.5\tabularnewline
-2001 & 9 & 0 & 22.0\tabularnewline
-2001 & 9 & 1 & 78.0\tabularnewline
-2001 & 9 & 2 & 1.0\tabularnewline
-2001 & 10 & 0 & 34.0\tabularnewline
-2001 & 10 & 1 & 134.0\tabularnewline
-2001 & 10 & 2 & 13.0\tabularnewline
-2001 & 11 & 0 & 19.0\tabularnewline
-2001 & 11 & 1 & 73.0\tabularnewline
-2001 & 11 & 2 & 3.0\tabularnewline
-2001 & 12 & 0 & 16.0\tabularnewline
-2001 & 12 & 1 & 47.0\tabularnewline
-2001 & 12 & 2 & 0.5\tabularnewline
-2002 & 1 & 0 & 27.0\tabularnewline
-2002 & 1 & 1 & 183.0\tabularnewline
-2002 & 1 & 2 & 37.5\tabularnewline
-2002 & 2 & 0 & 36.0\tabularnewline
-2002 & 2 & 1 & 150.0\tabularnewline
-2002 & 2 & 2 & 10.0\tabularnewline
-2002 & 3 & 0 & 19.0\tabularnewline
-2002 & 3 & 1 & 54.0\tabularnewline
-2002 & 3 & 2 & 2.0\tabularnewline
-2002 & 4 & 0 & 6.0\tabularnewline
-2002 & 4 & 1 & 6.0\tabularnewline
-2002 & 4 & 2 & 0.0\tabularnewline
-2002 & 5 & 0 & 10.0\tabularnewline
-2002 & 5 & 1 & 19.0\tabularnewline
-2002 & 5 & 2 & 0.0\tabularnewline
-2002 & 6 & 0 & 38.0\tabularnewline
-2002 & 6 & 1 & 140.0\tabularnewline
-2002 & 6 & 2 & 23.0\tabularnewline
-2002 & 7 & 0 & 58.0\tabularnewline
-2002 & 7 & 1 & 300.0\tabularnewline
-2002 & 7 & 2 & 42.0\tabularnewline
-2002 & 8 & 0 & 38.0\tabularnewline
-2002 & 8 & 1 & 192.0\tabularnewline
-2002 & 8 & 2 & 24.5\tabularnewline
-2002 & 9 & 0 & 21.0\tabularnewline
-2002 & 9 & 1 & 71.0\tabularnewline
-2002 & 9 & 2 & 1.0\tabularnewline
-2002 & 10 & 0 & 33.0\tabularnewline
-2002 & 10 & 1 & 127.0\tabularnewline
-2002 & 10 & 2 & 13.0\tabularnewline
-2002 & 11 & 0 & 17.0\tabularnewline
-2002 & 11 & 1 & 68.0\tabularnewline
-2002 & 11 & 2 & 3.0\tabularnewline
-2002 & 12 & 0 & 14.0\tabularnewline
-2002 & 12 & 1 & 42.0\tabularnewline
-2002 & 12 & 2 & 0.0\tabularnewline
-2003 & 1 & 0 & 29.0\tabularnewline
-2003 & 1 & 1 & 196.0\tabularnewline
-2003 & 1 & 2 & 39.0\tabularnewline
-2003 & 2 & 0 & 35.0\tabularnewline
-2003 & 2 & 1 & 153.0\tabularnewline
-2003 & 2 & 2 & 12.0\tabularnewline
-2003 & 3 & 0 & 20.0\tabularnewline
-2003 & 3 & 1 & 52.0\tabularnewline
-2003 & 3 & 2 & 2.0\tabularnewline
-2003 & 4 & 0 & 6.0\tabularnewline
-2003 & 4 & 1 & 6.0\tabularnewline
-2003 & 4 & 2 & 0.0\tabularnewline
-2003 & 5 & 0 & 10.5\tabularnewline
-2003 & 5 & 1 & 21.0\tabularnewline
-2003 & 5 & 2 & 1.0\tabularnewline
-2003 & 6 & 0 & 40.0\tabularnewline
-2003 & 6 & 1 & 151.0\tabularnewline
-2003 & 6 & 2 & 25.0\tabularnewline
-2003 & 7 & 0 & 60.0\tabularnewline
-2003 & 7 & 1 & 326.0\tabularnewline
-2003 & 7 & 2 & 41.0\tabularnewline
-2003 & 8 & 0 & 41.0\tabularnewline
-2003 & 8 & 1 & 198.5\tabularnewline
-2003 & 8 & 2 & 31.0\tabularnewline
-2003 & 9 & 0 & 21.0\tabularnewline
-2003 & 9 & 1 & 73.0\tabularnewline
-2003 & 9 & 2 & 2.0\tabularnewline
-2003 & 10 & 0 & 33.0\tabularnewline
-2003 & 10 & 1 & 140.0\tabularnewline
-2003 & 10 & 2 & 13.5\tabularnewline
-2003 & 11 & 0 & 18.0\tabularnewline
-2003 & 11 & 1 & 69.0\tabularnewline
-2003 & 11 & 2 & 2.0\tabularnewline
-2003 & 12 & 0 & 14.0\tabularnewline
-2003 & 12 & 1 & 42.0\tabularnewline
-2003 & 12 & 2 & 0.0\tabularnewline
-2004 & 1 & 0 & 27.0\tabularnewline
-2004 & 1 & 1 & 199.0\tabularnewline
-2004 & 1 & 2 & 65.0\tabularnewline
-2004 & 2 & 0 & 35.0\tabularnewline
-2004 & 2 & 1 & 152.0\tabularnewline
-2004 & 2 & 2 & 13.0\tabularnewline
-2004 & 3 & 0 & 20.0\tabularnewline
-2004 & 3 & 1 & 52.0\tabularnewline
-2004 & 3 & 2 & 2.5\tabularnewline
-2004 & 4 & 0 & 6.0\tabularnewline
-2004 & 4 & 1 & 4.0\tabularnewline
-2004 & 4 & 2 & 0.0\tabularnewline
-2004 & 5 & 0 & 13.0\tabularnewline
-2004 & 5 & 1 & 20.0\tabularnewline
-2004 & 5 & 2 & 2.0\tabularnewline
-2004 & 6 & 0 & 41.0\tabularnewline
-2004 & 6 & 1 & 152.0\tabularnewline
-2004 & 6 & 2 & 25.0\tabularnewline
-2004 & 7 & 0 & 61.0\tabularnewline
-2004 & 7 & 1 & 337.0\tabularnewline
-2004 & 7 & 2 & 42.0\tabularnewline
-2004 & 8 & 0 & 40.0\tabularnewline
-2004 & 8 & 1 & 201.0\tabularnewline
-2004 & 8 & 2 & 36.0\tabularnewline
-2004 & 9 & 0 & 20.0\tabularnewline
-2004 & 9 & 1 & 69.0\tabularnewline
-2004 & 9 & 2 & 1.0\tabularnewline
-2004 & 10 & 0 & 34.0\tabularnewline
-2004 & 10 & 1 & 144.0\tabularnewline
-2004 & 10 & 2 & 13.0\tabularnewline
-2004 & 11 & 0 & 18.0\tabularnewline
-2004 & 11 & 1 & 66.0\tabularnewline
-2004 & 11 & 2 & 3.0\tabularnewline
-2004 & 12 & 0 & 13.0\tabularnewline
-2004 & 12 & 1 & 37.0\tabularnewline
-2004 & 12 & 2 & 0.0\tabularnewline
-2005 & 1 & 0 & 34.0\tabularnewline
-2005 & 1 & 1 & 234.0\tabularnewline
-2005 & 1 & 2 & 28.0\tabularnewline
-2005 & 2 & 0 & 37.0\tabularnewline
-2005 & 2 & 1 & 162.0\tabularnewline
-2005 & 2 & 2 & 14.0\tabularnewline
-2005 & 3 & 0 & 20.0\tabularnewline
-2005 & 3 & 1 & 53.0\tabularnewline
-2005 & 3 & 2 & 3.0\tabularnewline
-2005 & 4 & 0 & 7.0\tabularnewline
-2005 & 4 & 1 & 3.0\tabularnewline
-2005 & 4 & 2 & 0.0\tabularnewline
-2005 & 5 & 0 & 15.0\tabularnewline
-2005 & 5 & 1 & 20.0\tabularnewline
-2005 & 5 & 2 & 4.0\tabularnewline
-2005 & 6 & 0 & 43.0\tabularnewline
-2005 & 6 & 1 & 164.0\tabularnewline
-2005 & 6 & 2 & 27.0\tabularnewline
-2005 & 7 & 0 & 62.0\tabularnewline
-2005 & 7 & 1 & 352.0\tabularnewline
-2005 & 7 & 2 & 44.0\tabularnewline
-2005 & 8 & 0 & 43.0\tabularnewline
-2005 & 8 & 1 & 218.0\tabularnewline
-2005 & 8 & 2 & 27.0\tabularnewline
-2005 & 9 & 0 & 19.0\tabularnewline
-2005 & 9 & 1 & 67.0\tabularnewline
-2005 & 9 & 2 & 1.0\tabularnewline
-2005 & 10 & 0 & 34.0\tabularnewline
-2005 & 10 & 1 & 147.0\tabularnewline
-2005 & 10 & 2 & 16.5\tabularnewline
-2005 & 11 & 0 & 17.0\tabularnewline
-2005 & 11 & 1 & 65.0\tabularnewline
-2005 & 11 & 2 & 2.0\tabularnewline
-2005 & 12 & 0 & 11.0\tabularnewline
-2005 & 12 & 1 & 32.0\tabularnewline
-2005 & 12 & 2 & 0.0\tabularnewline
-2006 & 1 & 0 & 31.0\tabularnewline
-2006 & 1 & 1 & 275.0\tabularnewline
-2006 & 1 & 2 & 36.0\tabularnewline
-2006 & 2 & 0 & 38.0\tabularnewline
-2006 & 2 & 1 & 168.0\tabularnewline
-2006 & 2 & 2 & 13.0\tabularnewline
-2006 & 3 & 0 & 20.0\tabularnewline
-2006 & 3 & 1 & 52.0\tabularnewline
-2006 & 3 & 2 & 4.0\tabularnewline
-2006 & 4 & 0 & 7.0\tabularnewline
-2006 & 4 & 1 & 3.0\tabularnewline
-2006 & 4 & 2 & 0.0\tabularnewline
-2006 & 5 & 0 & 16.0\tabularnewline
-2006 & 5 & 1 & 26.0\tabularnewline
-2006 & 5 & 2 & 9.0\tabularnewline
-2006 & 6 & 0 & 43.0\tabularnewline
-2006 & 6 & 1 & 175.0\tabularnewline
-2006 & 6 & 2 & 25.0\tabularnewline
-2006 & 7 & 0 & 68.0\tabularnewline
-2006 & 7 & 1 & 385.0\tabularnewline
-2006 & 7 & 2 & 43.5\tabularnewline
-2006 & 8 & 0 & 46.0\tabularnewline
-2006 & 8 & 1 & 221.0\tabularnewline
-2006 & 8 & 2 & 25.0\tabularnewline
-2006 & 9 & 0 & 19.0\tabularnewline
-2006 & 9 & 1 & 65.0\tabularnewline
-2006 & 9 & 2 & 1.5\tabularnewline
-2006 & 10 & 0 & 36.0\tabularnewline
-2006 & 10 & 1 & 161.0\tabularnewline
-2006 & 10 & 2 & 16.0\tabularnewline
-2006 & 11 & 0 & 18.0\tabularnewline
-2006 & 11 & 1 & 62.0\tabularnewline
-2006 & 11 & 2 & 3.0\tabularnewline
-2006 & 12 & 0 & 10.0\tabularnewline
-2006 & 12 & 1 & 28.0\tabularnewline
-2006 & 12 & 2 & 0.0\tabularnewline
-2007 & 1 & 0 & 33.0\tabularnewline
-2007 & 1 & 1 & 290.5\tabularnewline
-2007 & 1 & 2 & 52.0\tabularnewline
-2007 & 2 & 0 & 39.0\tabularnewline
-2007 & 2 & 1 & 172.5\tabularnewline
-2007 & 2 & 2 & 16.0\tabularnewline
-2007 & 3 & 0 & 21.0\tabularnewline
-2007 & 3 & 1 & 53.0\tabularnewline
-2007 & 3 & 2 & 5.5\tabularnewline
-2007 & 4 & 0 & 9.0\tabularnewline
-2007 & 4 & 1 & 4.0\tabularnewline
-2007 & 4 & 2 & 0.0\tabularnewline
-2007 & 5 & 0 & 17.0\tabularnewline
-2007 & 5 & 1 & 31.0\tabularnewline
-2007 & 5 & 2 & 11.0\tabularnewline
-2007 & 6 & 0 & 44.0\tabularnewline
-2007 & 6 & 1 & 181.0\tabularnewline
-2007 & 6 & 2 & 27.0\tabularnewline
-2007 & 7 & 0 & 70.0\tabularnewline
-2007 & 7 & 1 & 400.0\tabularnewline
-2007 & 7 & 2 & 45.0\tabularnewline
-2007 & 8 & 0 & 48.0\tabularnewline
-2007 & 8 & 1 & 227.5\tabularnewline
-2007 & 8 & 2 & 38.5\tabularnewline
-2007 & 9 & 0 & 20.0\tabularnewline
-2007 & 9 & 1 & 66.0\tabularnewline
-2007 & 9 & 2 & 1.0\tabularnewline
-2007 & 10 & 0 & 37.0\tabularnewline
-2007 & 10 & 1 & 172.5\tabularnewline
-2007 & 10 & 2 & 15.0\tabularnewline
-2007 & 11 & 0 & 18.0\tabularnewline
-2007 & 11 & 1 & 61.0\tabularnewline
-2007 & 11 & 2 & 1.0\tabularnewline
-2007 & 12 & 0 & 10.0\tabularnewline
-2007 & 12 & 1 & 26.0\tabularnewline
-2007 & 12 & 2 & 0.0\tabularnewline
-2008 & 1 & 0 & 33.0\tabularnewline
-2008 & 1 & 1 & 276.0\tabularnewline
-2008 & 1 & 2 & 75.5\tabularnewline
-2008 & 2 & 0 & 38.0\tabularnewline
-2008 & 2 & 1 & 162.0\tabularnewline
-2008 & 2 & 2 & 18.0\tabularnewline
-2008 & 3 & 0 & 22.0\tabularnewline
-2008 & 3 & 1 & 53.0\tabularnewline
-2008 & 3 & 2 & 5.0\tabularnewline
-2008 & 4 & 0 & 9.0\tabularnewline
-2008 & 4 & 1 & 4.0\tabularnewline
-2008 & 4 & 2 & 0.0\tabularnewline
-2008 & 5 & 0 & 19.0\tabularnewline
-2008 & 5 & 1 & 32.0\tabularnewline
-2008 & 5 & 2 & 12.0\tabularnewline
-2008 & 6 & 0 & 42.0\tabularnewline
-2008 & 6 & 1 & 175.0\tabularnewline
-2008 & 6 & 2 & 29.0\tabularnewline
-2008 & 7 & 0 & 65.0\tabularnewline
-2008 & 7 & 1 & 375.0\tabularnewline
-2008 & 7 & 2 & 47.0\tabularnewline
-2008 & 8 & 0 & 48.0\tabularnewline
-2008 & 8 & 1 & 228.0\tabularnewline
-2008 & 8 & 2 & 36.5\tabularnewline
-2008 & 9 & 0 & 20.0\tabularnewline
-2008 & 9 & 1 & 61.0\tabularnewline
-2008 & 9 & 2 & 2.0\tabularnewline
-2008 & 10 & 0 & 37.0\tabularnewline
-2008 & 10 & 1 & 163.0\tabularnewline
-2008 & 10 & 2 & 18.0\tabularnewline
-2008 & 11 & 0 & 18.0\tabularnewline
-2008 & 11 & 1 & 58.0\tabularnewline
-2008 & 11 & 2 & 2.0\tabularnewline
-2008 & 12 & 0 & 10.0\tabularnewline
-2008 & 12 & 1 & 23.0\tabularnewline
-2008 & 12 & 2 & 0.0\tabularnewline
-2009 & 1 & 0 & 39.0\tabularnewline
-2009 & 1 & 1 & 307.0\tabularnewline
-2009 & 1 & 2 & 73.5\tabularnewline
-2009 & 2 & 0 & 40.0\tabularnewline
-2009 & 2 & 1 & 184.0\tabularnewline
-2009 & 2 & 2 & 20.5\tabularnewline
-2009 & 3 & 0 & 22.0\tabularnewline
-2009 & 3 & 1 & 62.0\tabularnewline
-2009 & 3 & 2 & 6.0\tabularnewline
-2009 & 4 & 0 & 10.0\tabularnewline
-2009 & 4 & 1 & 6.0\tabularnewline
-2009 & 4 & 2 & 1.0\tabularnewline
-2009 & 5 & 0 & 19.0\tabularnewline
-2009 & 5 & 1 & 39.0\tabularnewline
-2009 & 5 & 2 & 27.0\tabularnewline
-2009 & 6 & 0 & 44.0\tabularnewline
-2009 & 6 & 1 & 195.0\tabularnewline
-2009 & 6 & 2 & 35.0\tabularnewline
-2009 & 7 & 0 & 69.0\tabularnewline
-2009 & 7 & 1 & 440.5\tabularnewline
-2009 & 7 & 2 & 70.0\tabularnewline
-2009 & 8 & 0 & 54.0\tabularnewline
-2009 & 8 & 1 & 258.0\tabularnewline
-2009 & 8 & 2 & 47.0\tabularnewline
-2009 & 9 & 0 & 21.0\tabularnewline
-2009 & 9 & 1 & 68.0\tabularnewline
-2009 & 9 & 2 & 3.0\tabularnewline
-2009 & 10 & 0 & 39.0\tabularnewline
-2009 & 10 & 1 & 187.0\tabularnewline
-2009 & 10 & 2 & 23.0\tabularnewline
-2009 & 11 & 0 & 19.0\tabularnewline
-2009 & 11 & 1 & 66.0\tabularnewline
-2009 & 11 & 2 & 3.0\tabularnewline
-2009 & 12 & 0 & 10.0\tabularnewline
-2009 & 12 & 1 & 23.0\tabularnewline
-2009 & 12 & 2 & 0.0\tabularnewline
-2010 & 1 & 0 & 37.0\tabularnewline
-2010 & 1 & 1 & 307.0\tabularnewline
-2010 & 1 & 2 & 61.5\tabularnewline
-2010 & 2 & 0 & 41.0\tabularnewline
-2010 & 2 & 1 & 190.0\tabularnewline
-2010 & 2 & 2 & 19.0\tabularnewline
-2010 & 3 & 0 & 24.0\tabularnewline
-2010 & 3 & 1 & 65.0\tabularnewline
-2010 & 3 & 2 & 8.0\tabularnewline
-2010 & 4 & 0 & 10.0\tabularnewline
-2010 & 4 & 1 & 6.0\tabularnewline
-2010 & 4 & 2 & 1.0\tabularnewline
-2010 & 5 & 0 & 20.0\tabularnewline
-2010 & 5 & 1 & 43.5\tabularnewline
-2010 & 5 & 2 & 32.5\tabularnewline
-2010 & 6 & 0 & 45.0\tabularnewline
-2010 & 6 & 1 & 210.0\tabularnewline
-2010 & 6 & 2 & 37.0\tabularnewline
-2010 & 7 & 0 & 70.0\tabularnewline
-2010 & 7 & 1 & 447.0\tabularnewline
-2010 & 7 & 2 & 70.0\tabularnewline
-2010 & 8 & 0 & 55.0\tabularnewline
-2010 & 8 & 1 & 269.0\tabularnewline
-2010 & 8 & 2 & 45.0\tabularnewline
-2010 & 9 & 0 & 21.0\tabularnewline
-2010 & 9 & 1 & 68.0\tabularnewline
-2010 & 9 & 2 & 4.0\tabularnewline
-2010 & 10 & 0 & 41.0\tabularnewline
-2010 & 10 & 1 & 191.0\tabularnewline
-2010 & 10 & 2 & 25.0\tabularnewline
-2010 & 11 & 0 & 19.0\tabularnewline
-2010 & 11 & 1 & 68.0\tabularnewline
-2010 & 11 & 2 & 2.0\tabularnewline
-2010 & 12 & 0 & 11.0\tabularnewline
-2010 & 12 & 1 & 23.0\tabularnewline
-2010 & 12 & 2 & 0.0\tabularnewline
-2011 & 1 & 0 & 46.0\tabularnewline
-2011 & 1 & 1 & 328.5\tabularnewline
-2011 & 1 & 2 & 71.5\tabularnewline
-2011 & 2 & 0 & 40.0\tabularnewline
-2011 & 2 & 1 & 190.0\tabularnewline
-2011 & 2 & 2 & 21.0\tabularnewline
-2011 & 3 & 0 & 25.0\tabularnewline
-2011 & 3 & 1 & 68.0\tabularnewline
-2011 & 3 & 2 & 8.0\tabularnewline
-2011 & 4 & 0 & 11.0\tabularnewline
-2011 & 4 & 1 & 8.0\tabularnewline
-2011 & 4 & 2 & 2.0\tabularnewline
-2011 & 5 & 0 & 20.0\tabularnewline
-2011 & 5 & 1 & 53.0\tabularnewline
-2011 & 5 & 2 & 31.0\tabularnewline
-2011 & 6 & 0 & 45.0\tabularnewline
-2011 & 6 & 1 & 218.0\tabularnewline
-2011 & 6 & 2 & 43.0\tabularnewline
-2011 & 7 & 0 & 72.0\tabularnewline
-2011 & 7 & 1 & 462.0\tabularnewline
-2011 & 7 & 2 & 70.5\tabularnewline
-2011 & 8 & 0 & 58.0\tabularnewline
-2011 & 8 & 1 & 281.0\tabularnewline
-2011 & 8 & 2 & 50.0\tabularnewline
-2011 & 9 & 0 & 21.0\tabularnewline
-2011 & 9 & 1 & 67.0\tabularnewline
-2011 & 9 & 2 & 5.0\tabularnewline
-2011 & 10 & 0 & 42.0\tabularnewline
-2011 & 10 & 1 & 193.0\tabularnewline
-2011 & 10 & 2 & 32.0\tabularnewline
-2011 & 11 & 0 & 20.0\tabularnewline
-2011 & 11 & 1 & 66.0\tabularnewline
-2011 & 11 & 2 & 3.0\tabularnewline
-2011 & 12 & 0 & 10.0\tabularnewline
-2011 & 12 & 1 & 24.0\tabularnewline
-2011 & 12 & 2 & 0.0\tabularnewline
-2012 & 1 & 0 & 46.0\tabularnewline
-2012 & 1 & 1 & 326.0\tabularnewline
-2012 & 1 & 2 & 63.0\tabularnewline
-2012 & 2 & 0 & 40.0\tabularnewline
-2012 & 2 & 1 & 199.0\tabularnewline
-2012 & 2 & 2 & 23.5\tabularnewline
-2012 & 3 & 0 & 26.0\tabularnewline
-2012 & 3 & 1 & 74.0\tabularnewline
-2012 & 3 & 2 & 12.0\tabularnewline
-2012 & 4 & 0 & 12.0\tabularnewline
-2012 & 4 & 1 & 9.0\tabularnewline
-2012 & 4 & 2 & 2.0\tabularnewline
-2012 & 5 & 0 & 23.0\tabularnewline
-2012 & 5 & 1 & 63.0\tabularnewline
-2012 & 5 & 2 & 39.0\tabularnewline
-2012 & 6 & 0 & 47.0\tabularnewline
-2012 & 6 & 1 & 230.0\tabularnewline
-2012 & 6 & 2 & 44.0\tabularnewline
-2012 & 7 & 0 & 73.0\tabularnewline
-2012 & 7 & 1 & 476.0\tabularnewline
-2012 & 7 & 2 & 81.0\tabularnewline
-2012 & 8 & 0 & 63.0\tabularnewline
-2012 & 8 & 1 & 303.0\tabularnewline
-2012 & 8 & 2 & 48.0\tabularnewline
-2012 & 9 & 0 & 21.0\tabularnewline
-2012 & 9 & 1 & 68.5\tabularnewline
-2012 & 9 & 2 & 4.0\tabularnewline
-2012 & 10 & 0 & 44.0\tabularnewline
-2012 & 10 & 1 & 205.5\tabularnewline
-2012 & 10 & 2 & 32.0\tabularnewline
-2012 & 11 & 0 & 21.0\tabularnewline
-2012 & 11 & 1 & 70.0\tabularnewline
-2012 & 11 & 2 & 3.0\tabularnewline
-2012 & 12 & 0 & 10.0\tabularnewline
-2012 & 12 & 1 & 22.0\tabularnewline
-2012 & 12 & 2 & 0.0\tabularnewline
-2013 & 1 & 0 & 47.0\tabularnewline
-2013 & 1 & 1 & 337.0\tabularnewline
-2013 & 1 & 2 & 82.0\tabularnewline
-2013 & 2 & 0 & 43.0\tabularnewline
-2013 & 2 & 1 & 203.0\tabularnewline
-2013 & 2 & 2 & 24.0\tabularnewline
-2013 & 3 & 0 & 27.0\tabularnewline
-2013 & 3 & 1 & 77.0\tabularnewline
-2013 & 3 & 2 & 19.0\tabularnewline
-2013 & 4 & 0 & 13.0\tabularnewline
-2013 & 4 & 1 & 10.0\tabularnewline
-2013 & 4 & 2 & 4.0\tabularnewline
-2013 & 5 & 0 & 26.0\tabularnewline
-2013 & 5 & 1 & 73.5\tabularnewline
-2013 & 5 & 2 & 49.0\tabularnewline
-2013 & 6 & 0 & 48.0\tabularnewline
-2013 & 6 & 1 & 249.0\tabularnewline
-2013 & 6 & 2 & 54.0\tabularnewline
-2013 & 7 & 0 & 77.0\tabularnewline
-2013 & 7 & 1 & 485.0\tabularnewline
-2013 & 7 & 2 & 87.5\tabularnewline
-2013 & 8 & 0 & 61.0\tabularnewline
-2013 & 8 & 1 & 320.0\tabularnewline
-2013 & 8 & 2 & 56.0\tabularnewline
-2013 & 9 & 0 & 21.0\tabularnewline
-2013 & 9 & 1 & 73.0\tabularnewline
-2013 & 9 & 2 & 5.0\tabularnewline
-2013 & 10 & 0 & 43.0\tabularnewline
-2013 & 10 & 1 & 215.5\tabularnewline
-2013 & 10 & 2 & 36.0\tabularnewline
-2013 & 11 & 0 & 21.0\tabularnewline
-2013 & 11 & 1 & 72.5\tabularnewline
-2013 & 11 & 2 & 3.0\tabularnewline
-2013 & 12 & 0 & 10.0\tabularnewline
-2013 & 12 & 1 & 22.0\tabularnewline
-2013 & 12 & 2 & 0.0\tabularnewline
-2014 & 1 & 0 & 45.0\tabularnewline
-2014 & 1 & 1 & 361.0\tabularnewline
-2014 & 1 & 2 & 70.0\tabularnewline
-2014 & 2 & 0 & 44.0\tabularnewline
-2014 & 2 & 1 & 202.0\tabularnewline
-2014 & 2 & 2 & 27.0\tabularnewline
-2014 & 3 & 0 & 28.0\tabularnewline
-2014 & 3 & 1 & 88.0\tabularnewline
-2014 & 3 & 2 & 20.0\tabularnewline
-2014 & 4 & 0 & 14.0\tabularnewline
-2014 & 4 & 1 & 14.0\tabularnewline
-2014 & 4 & 2 & 5.0\tabularnewline
-2014 & 5 & 0 & 26.0\tabularnewline
-2014 & 5 & 1 & 98.0\tabularnewline
-2014 & 5 & 2 & 39.0\tabularnewline
-2014 & 6 & 0 & 48.0\tabularnewline
-2014 & 6 & 1 & 248.5\tabularnewline
-2014 & 6 & 2 & 57.0\tabularnewline
-2014 & 7 & 0 & 80.0\tabularnewline
-2014 & 7 & 1 & 484.5\tabularnewline
-2014 & 7 & 2 & 88.5\tabularnewline
-2014 & 8 & 0 & 63.0\tabularnewline
-2014 & 8 & 1 & 338.0\tabularnewline
-2014 & 8 & 2 & 68.5\tabularnewline
-2014 & 9 & 0 & 23.0\tabularnewline
-2014 & 9 & 1 & 74.0\tabularnewline
-2014 & 9 & 2 & 7.0\tabularnewline
-2014 & 10 & 0 & 44.0\tabularnewline
-2014 & 10 & 1 & 220.0\tabularnewline
-2014 & 10 & 2 & 35.0\tabularnewline
-2014 & 11 & 0 & 21.0\tabularnewline
-2014 & 11 & 1 & 75.0\tabularnewline
-2014 & 11 & 2 & 4.0\tabularnewline
-2014 & 12 & 0 & 11.0\tabularnewline
-2014 & 12 & 1 & 22.0\tabularnewline
-2014 & 12 & 2 & 0.0\tabularnewline
-2015 & 1 & 0 & 50.0\tabularnewline
-2015 & 1 & 1 & 351.0\tabularnewline
-2015 & 1 & 2 & 87.0\tabularnewline
-2015 & 2 & 0 & 45.0\tabularnewline
-2015 & 2 & 1 & 211.0\tabularnewline
-2015 & 2 & 2 & 27.0\tabularnewline
-2015 & 3 & 0 & 29.0\tabularnewline
-2015 & 3 & 1 & 91.5\tabularnewline
-2015 & 3 & 2 & 23.0\tabularnewline
-2015 & 4 & 0 & 14.5\tabularnewline
-2015 & 4 & 1 & 19.0\tabularnewline
-2015 & 4 & 2 & 6.0\tabularnewline
-2015 & 5 & 0 & 28.0\tabularnewline
-2015 & 5 & 1 & 110.5\tabularnewline
-2015 & 5 & 2 & 43.5\tabularnewline
-2015 & 6 & 0 & 49.0\tabularnewline
-2015 & 6 & 1 & 255.0\tabularnewline
-2015 & 6 & 2 & 56.0\tabularnewline
-2015 & 7 & 0 & 79.0\tabularnewline
-2015 & 7 & 1 & 490.0\tabularnewline
-2015 & 7 & 2 & 99.0\tabularnewline
-2015 & 8 & 0 & 63.0\tabularnewline
-2015 & 8 & 1 & 358.0\tabularnewline
-2015 & 8 & 2 & 66.0\tabularnewline
-2015 & 9 & 0 & 23.0\tabularnewline
-2015 & 9 & 1 & 78.0\tabularnewline
-2015 & 9 & 2 & 7.0\tabularnewline
-2015 & 10 & 0 & 45.0\tabularnewline
-2015 & 10 & 1 & 220.0\tabularnewline
-2015 & 10 & 2 & 44.0\tabularnewline
-2015 & 11 & 0 & 22.0\tabularnewline
-2015 & 11 & 1 & 78.0\tabularnewline
-2015 & 11 & 2 & 5.0\tabularnewline
-2015 & 12 & 0 & 12.0\tabularnewline
-2015 & 12 & 1 & 22.0\tabularnewline
-2015 & 12 & 2 & 0.0\tabularnewline
-2016 & 1 & 0 & 49.0\tabularnewline
-2016 & 1 & 1 & 412.0\tabularnewline
-2016 & 1 & 2 & 111.0\tabularnewline
-2016 & 2 & 0 & 48.0\tabularnewline
-2016 & 2 & 1 & 218.0\tabularnewline
-2016 & 2 & 2 & 29.0\tabularnewline
-2016 & 3 & 0 & 31.0\tabularnewline
-2016 & 3 & 1 & 112.0\tabularnewline
-2016 & 3 & 2 & 33.0\tabularnewline
-2016 & 4 & 0 & 17.0\tabularnewline
-2016 & 4 & 1 & 34.0\tabularnewline
-2016 & 4 & 2 & 12.0\tabularnewline
-2016 & 5 & 0 & 33.0\tabularnewline
-2016 & 5 & 1 & 136.0\tabularnewline
-2016 & 5 & 2 & 51.0\tabularnewline
-2016 & 6 & 0 & 52.0\tabularnewline
-2016 & 6 & 1 & 274.0\tabularnewline
-2016 & 6 & 2 & 62.0\tabularnewline
-2016 & 7 & 0 & 81.0\tabularnewline
-2016 & 7 & 1 & 500.0\tabularnewline
-2016 & 7 & 2 & 111.0\tabularnewline
-2016 & 8 & 0 & 65.0\tabularnewline
-2016 & 8 & 1 & 363.5\tabularnewline
-2016 & 8 & 2 & 80.0\tabularnewline
-2016 & 9 & 0 & 26.0\tabularnewline
-2016 & 9 & 1 & 90.0\tabularnewline
-2016 & 9 & 2 & 12.0\tabularnewline
-2016 & 10 & 0 & 47.0\tabularnewline
-2016 & 10 & 1 & 230.0\tabularnewline
-2016 & 10 & 2 & 51.5\tabularnewline
-2016 & 11 & 0 & 22.0\tabularnewline
-2016 & 11 & 1 & 85.0\tabularnewline
-2016 & 11 & 2 & 6.0\tabularnewline
-2016 & 12 & 0 & 12.0\tabularnewline
-2016 & 12 & 1 & 31.0\tabularnewline
-2016 & 12 & 2 & 0.0\tabularnewline
-2017 & 1 & 0 & 47.0\tabularnewline
-2017 & 1 & 1 & 412.0\tabularnewline
-2017 & 1 & 2 & 77.0\tabularnewline
-2017 & 2 & 0 & 47.0\tabularnewline
-2017 & 2 & 1 & 232.5\tabularnewline
-2017 & 2 & 2 & 31.0\tabularnewline
-2017 & 3 & 0 & 32.0\tabularnewline
-2017 & 3 & 1 & 125.0\tabularnewline
-2017 & 3 & 2 & 31.0\tabularnewline
-2017 & 4 & 0 & 19.0\tabularnewline
-2017 & 4 & 1 & 50.0\tabularnewline
-2017 & 4 & 2 & 14.0\tabularnewline
-2017 & 5 & 0 & 34.0\tabularnewline
-2017 & 5 & 1 & 155.0\tabularnewline
-2017 & 5 & 2 & 51.0\tabularnewline
-2017 & 6 & 0 & 52.0\tabularnewline
-2017 & 6 & 1 & 288.0\tabularnewline
-2017 & 6 & 2 & 70.5\tabularnewline
-2017 & 7 & 0 & 80.0\tabularnewline
-2017 & 7 & 1 & 538.0\tabularnewline
-2017 & 7 & 2 & 115.0\tabularnewline
-2017 & 8 & 0 & 68.0\tabularnewline
-2017 & 8 & 1 & 384.0\tabularnewline
-2017 & 8 & 2 & 89.0\tabularnewline
-2017 & 9 & 0 & 26.0\tabularnewline
-2017 & 9 & 1 & 99.0\tabularnewline
-2017 & 9 & 2 & 14.0\tabularnewline
-2017 & 10 & 0 & 47.0\tabularnewline
-2017 & 10 & 1 & 242.0\tabularnewline
-2017 & 10 & 2 & 56.0\tabularnewline
-2017 & 11 & 0 & 22.0\tabularnewline
-2017 & 11 & 1 & 94.0\tabularnewline
-2017 & 11 & 2 & 7.0\tabularnewline
-2017 & 12 & 0 & 13.0\tabularnewline
-2017 & 12 & 1 & 37.0\tabularnewline
-2017 & 12 & 2 & 1.0\tabularnewline
-2018 & 1 & 0 & 48.0\tabularnewline
-2018 & 1 & 1 & 402.0\tabularnewline
-2018 & 1 & 2 & 89.0\tabularnewline
-2018 & 2 & 0 & 46.0\tabularnewline
-2018 & 2 & 1 & 223.0\tabularnewline
-2018 & 2 & 2 & 41.0\tabularnewline
-2018 & 3 & 0 & 33.0\tabularnewline
-2018 & 3 & 1 & 128.0\tabularnewline
-2018 & 3 & 2 & 36.0\tabularnewline
-2018 & 4 & 0 & 20.0\tabularnewline
-2018 & 4 & 1 & 56.0\tabularnewline
-2018 & 4 & 2 & 16.0\tabularnewline
-2018 & 5 & 0 & 36.0\tabularnewline
-2018 & 5 & 1 & 168.0\tabularnewline
-2018 & 5 & 2 & 64.0\tabularnewline
-2018 & 6 & 0 & 51.0\tabularnewline
-2018 & 6 & 1 & 296.0\tabularnewline
-2018 & 6 & 2 & 77.0\tabularnewline
-2018 & 7 & 0 & 79.0\tabularnewline
-2018 & 7 & 1 & 504.0\tabularnewline
-2018 & 7 & 2 & 122.0\tabularnewline
-2018 & 8 & 0 & 70.0\tabularnewline
-2018 & 8 & 1 & 378.0\tabularnewline
-2018 & 8 & 2 & 97.0\tabularnewline
-2018 & 9 & 0 & 27.0\tabularnewline
-2018 & 9 & 1 & 102.0\tabularnewline
-2018 & 9 & 2 & 17.0\tabularnewline
-2018 & 10 & 0 & 47.0\tabularnewline
-2018 & 10 & 1 & 245.0\tabularnewline
-2018 & 10 & 2 & 54.0\tabularnewline
-2018 & 11 & 0 & 22.0\tabularnewline
-2018 & 11 & 1 & 95.0\tabularnewline
-2018 & 11 & 2 & 8.0\tabularnewline
-2018 & 12 & 0 & 12.0\tabularnewline
-2018 & 12 & 1 & 39.0\tabularnewline
-2018 & 12 & 2 & 1.0\tabularnewline
-2019 & 1 & 0 & 49.0\tabularnewline
-2019 & 1 & 1 & 427.0\tabularnewline
-2019 & 1 & 2 & 65.0\tabularnewline
-2019 & 2 & 0 & 44.0\tabularnewline
-2019 & 2 & 1 & 229.0\tabularnewline
-2019 & 2 & 2 & 42.0\tabularnewline
-2019 & 3 & 0 & 32.0\tabularnewline
-2019 & 3 & 1 & 131.0\tabularnewline
-2019 & 3 & 2 & 40.0\tabularnewline
-2019 & 4 & 0 & 20.0\tabularnewline
-2019 & 4 & 1 & 60.0\tabularnewline
-2019 & 4 & 2 & 23.0\tabularnewline
-2019 & 5 & 0 & 36.0\tabularnewline
-2019 & 5 & 1 & 197.0\tabularnewline
-2019 & 5 & 2 & 65.5\tabularnewline
-2019 & 6 & 0 & 52.0\tabularnewline
-2019 & 6 & 1 & 314.0\tabularnewline
-2019 & 6 & 2 & 80.0\tabularnewline
-2019 & 7 & 0 & 80.0\tabularnewline
-2019 & 7 & 1 & 531.0\tabularnewline
-2019 & 7 & 2 & 123.0\tabularnewline
-2019 & 8 & 0 & 65.0\tabularnewline
-2019 & 8 & 1 & 396.0\tabularnewline
-2019 & 8 & 2 & 104.0\tabularnewline
-2019 & 9 & 0 & 27.0\tabularnewline
-2019 & 9 & 1 & 106.0\tabularnewline
-2019 & 9 & 2 & 19.5\tabularnewline
-2019 & 10 & 0 & 49.0\tabularnewline
-2019 & 10 & 1 & 249.0\tabularnewline
-2019 & 10 & 2 & 56.0\tabularnewline
-2019 & 11 & 0 & 23.0\tabularnewline
-2019 & 11 & 1 & 97.0\tabularnewline
-2019 & 11 & 2 & 7.0\tabularnewline
-2019 & 12 & 0 & 12.0\tabularnewline
-2019 & 12 & 1 & 40.0\tabularnewline
-2019 & 12 & 2 & 1.0\tabularnewline
-\bottomrule
-\end{longtable}
-
-\begin{longtable}[]{@{}rrrr@{}}
-\toprule
-SteuerJahr & KreisSort & SteuerTarifSort &
-SteuerVermoegen\_p50\tabularnewline
+Year & DistrictNumber & TaxCategory & Wealth\tabularnewline
 \midrule
 \endhead
 1999 & 1 & 0 & 23.0\tabularnewline
@@ -1300,6 +538,17 @@ and district in Zurich.
 
 \includegraphics{report_files/figure-latex/plot_wealth-1.pdf}
 
+The previous graph shows the distribution of wealth by district, year
+and tax category. Since the ordinate is scaled for all tax categories
+with the same values, it is clearly visible the difference of
+accumulated wealth between the districts across all and those
+differences seems to have a clear trend in increasing. The biggest
+differences between districts can be see in the \emph{family category}
+subgraph. The highest values have been observed for district 7 and the
+lowest values for district 12. District 7, however, has the highest
+values among all tax categories. District 12 shows as well across all
+categories the lowest values of accumulated as well.
+
 \hypertarget{data-set-4-income-distribution-of-the-population-in-zuxfcrich-by-district}{%
 \subsection{Data set 4: Income distribution of the population in Zürich,
 by
@@ -1311,373 +560,89 @@ per tax class. The following table shows the accumulated income
 distribution across all districts of the city of Zürich between the
 years 1999 and 2019.
 
-\begin{longtable}[]{@{}rrlrlrrr@{}}
+\begin{longtable}[]{@{}rrlr@{}}
 \caption{Original data set: Distribution income tax per category,
 district and year}\tabularnewline
 \toprule
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-SteuerJahr\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-KreisSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-KreisLang\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-SteuerTarifSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-SteuerTarifLang\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-SteuerEinkommen\_p50\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-SteuerEinkommen\_p25\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-SteuerEinkommen\_p75\strut
-\end{minipage}\tabularnewline
+SteuerJahr & KreisSort & KreisLang & SteuerTarifSort\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-SteuerJahr\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-KreisSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-KreisLang\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-SteuerTarifSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-SteuerTarifLang\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-SteuerEinkommen\_p50\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-SteuerEinkommen\_p25\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-SteuerEinkommen\_p75\strut
-\end{minipage}\tabularnewline
+SteuerJahr & KreisSort & KreisLang & SteuerTarifSort\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-Kreis 1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-Grundtarif\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-37.8\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-17.40\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-64.80\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-Kreis 1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-Verheiratetentarif\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-83.4\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-52.00\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-130.20\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-Kreis 1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-Einelternfamilientarif\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-46.7\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-26.05\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-87.05\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-Kreis 2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-Grundtarif\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-37.9\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-19.90\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-58.20\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-Kreis 2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-Verheiratetentarif\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-69.7\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-49.10\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-101.40\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.08}}\raggedright
-Kreis 2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.12}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.18}}\raggedright
-Einelternfamilientarif\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-39.2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-21.90\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 7\tabcolsep) * \real{0.15}}\raggedleft
-58.90\strut
-\end{minipage}\tabularnewline
+1999 & 1 & Kreis 1 & 0\tabularnewline
+1999 & 1 & Kreis 1 & 1\tabularnewline
+1999 & 1 & Kreis 1 & 2\tabularnewline
+1999 & 2 & Kreis 2 & 0\tabularnewline
+1999 & 2 & Kreis 2 & 1\tabularnewline
+1999 & 2 & Kreis 2 & 2\tabularnewline
 \bottomrule
 \end{longtable}
 
-Examining the previous showed data revealed that the data set contains a
-lot of irrelevant information. For example, the columns
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule
+SteuerTarifLang & SteuerEinkommen\_p50 & SteuerEinkommen\_p25 &
+SteuerEinkommen\_p75\tabularnewline
+\midrule
+\endhead
+Grundtarif & 37.8 & 17.40 & 64.80\tabularnewline
+Verheiratetentarif & 83.4 & 52.00 & 130.20\tabularnewline
+Einelternfamilientarif & 46.7 & 26.05 & 87.05\tabularnewline
+Grundtarif & 37.9 & 19.90 & 58.20\tabularnewline
+Verheiratetentarif & 69.7 & 49.10 & 101.40\tabularnewline
+Einelternfamilientarif & 39.2 & 21.90 & 58.90\tabularnewline
+\bottomrule
+\end{longtable}
+
+Examinating the previous showed data revealed that the data set contains
+a lot of irrelevant information. For example, the columns
 \emph{``KreisSort''} and \emph{``KreisLang''} are redundant, since the
 first in simply the encoding of the second in number. The same applies
 for the the columns \emph{``SteuerTarifSort''} and
-\emph{``SteuerTarifLang''}, since the first here again, is the encoding
-of the second in number.\\
-However, the columns \emph{``KreisLang''} and \emph{``SteuerTarifLang''}
-are not redundant and therefore, droped.
+\emph{``SteuerTarifLang''}, since the first column, here again, is the
+encoding of the second in number. However, the columns
+\emph{``KreisLang''} and \emph{``SteuerTarifLang''} are redundant and
+therefore, droped. For practical reasons the columns
+\emph{``SteuerEinkommen\_p25''} and \emph{``SteuerEinkommen\_p75''} were
+droped as well.\\
+Moreover, the columns \emph{``SteuerTarifSort''} and
+\emph{``KreisSort''} are converted to factors, since those columns are
+automatically defined as integer number. Additionally, the names of the
+columns do not correspond with the previous data set and therefore, we
+have to change the following:
 
-\begin{longtable}[]{@{}rlrrrr@{}}
-\caption{Final data set: Distribution wealth tax per category, district
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Original Column Name & New Column Name\tabularnewline
+\midrule
+\endhead
+KreisSort & DistrictNumber\tabularnewline
+SteuerJahr & Year\tabularnewline
+SteuerEinkommen\_p50 & Income\tabularnewline
+SteuerTarifSort & Category\tabularnewline
+\bottomrule
+\end{longtable}
+
+Finally, after all modifications, the data set looks as follows:
+
+\begin{longtable}[]{@{}rllr@{}}
+\caption{Final data set: Distribution income tax per category, district
 and year}\tabularnewline
 \toprule
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-SteuerJahr\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-KreisSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-SteuerTarifSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-SteuerEinkommen\_p50\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-SteuerEinkommen\_p25\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-SteuerEinkommen\_p75\strut
-\end{minipage}\tabularnewline
+Year & DistrictNumber & TaxCategory & Income\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-SteuerJahr\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-KreisSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-SteuerTarifSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-SteuerEinkommen\_p50\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-SteuerEinkommen\_p25\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-SteuerEinkommen\_p75\strut
-\end{minipage}\tabularnewline
+Year & DistrictNumber & TaxCategory & Income\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-37.8\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-17.40\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-64.80\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-83.4\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-52.00\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-130.20\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-46.7\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-26.05\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-87.05\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-37.9\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-19.90\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-58.20\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-69.7\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-49.10\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-101.40\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.11}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.10}}\raggedright
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.16}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-39.2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-21.90\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 5\tabcolsep) * \real{0.21}}\raggedleft
-58.90\strut
-\end{minipage}\tabularnewline
+1999 & 1 & 0 & 37.8\tabularnewline
+1999 & 1 & 1 & 83.4\tabularnewline
+1999 & 1 & 2 & 46.7\tabularnewline
+1999 & 2 & 0 & 37.9\tabularnewline
+1999 & 2 & 1 & 69.7\tabularnewline
+1999 & 2 & 2 & 39.2\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -1686,191 +651,304 @@ and district in Zurich.
 
 \includegraphics{report_files/figure-latex/plot_income-1.pdf}
 
+The previous graph shows the distribution of income by district, year
+and tax category. Since the ordinate is scaled for all tax categories
+with the same values, it is clearly visible the difference of
+accumulated income between the districts across all and those
+differences seems to have a clear trend in increasing. The biggest
+differences between districts can be see in the \emph{family category}
+subgraph. The highest values have been observed for district 7 and the
+lowest values for district 12. District 7, however, has the highest
+values among all tax categories. District 12 shows as well across all
+categories the lowest values of accumulated as well.
+
+\newpage
+
 \hypertarget{combine-wealth-and-income-data}{%
-\subsection{Combine Wealth and Income
+\subsection{Combine wealth and income
 data}\label{combine-wealth-and-income-data}}
 
 The aim of this part is to combine the income and wealth data into one
-dataframe.
+data frame. As a first step, both data frames are combine using the
+\emph{merge()} function. The merged data sets of income and wealth data,
+contains the income data and wealth data per district and tax category
+combined.
 
-\begin{longtable}[]{@{}rlrrrrr@{}}
+\begin{longtable}[]{@{}rllrr@{}}
 \caption{Merged income and wealth data}\tabularnewline
 \toprule
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-SteuerJahr\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-KreisSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-SteuerTarifSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerEinkommen\_p50\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerEinkommen\_p25\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerEinkommen\_p75\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerVermoegen\_p50\strut
-\end{minipage}\tabularnewline
+Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-SteuerJahr\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-KreisSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-SteuerTarifSort\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerEinkommen\_p50\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerEinkommen\_p25\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerEinkommen\_p75\strut
-\end{minipage} &
-\begin{minipage}[b]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-SteuerVermoegen\_p50\strut
-\end{minipage}\tabularnewline
+Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-37.8\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-17.40\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-64.80\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-23.0\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-83.4\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-52.00\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-130.20\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-182.0\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-46.7\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-26.05\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-87.05\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-27.5\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-10\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-38.5\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-20.00\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-57.30\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-34.0\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-10\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-1\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-69.0\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-49.60\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-98.40\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-124.0\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedleft
-1999\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.09}}\raggedright
-10\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.14}}\raggedleft
-2\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-37.7\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-20.65\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-54.15\strut
-\end{minipage} &
-\begin{minipage}[t]{(\columnwidth - 6\tabcolsep) * \real{0.17}}\raggedleft
-11.0\strut
-\end{minipage}\tabularnewline
+1999 & 1 & 0 & 37.8 & 23.0\tabularnewline
+1999 & 1 & 1 & 83.4 & 182.0\tabularnewline
+1999 & 1 & 2 & 46.7 & 27.5\tabularnewline
+1999 & 10 & 0 & 38.5 & 34.0\tabularnewline
+1999 & 10 & 1 & 69.0 & 124.0\tabularnewline
+1999 & 10 & 2 & 37.7 & 11.0\tabularnewline
 \bottomrule
 \end{longtable}
+
+Thereafter, the district name has to be modified in order to match if
+the data presented in sections concerning
+\emph{\protect\hyperlink{Dataux5cux2520setux5cux25201:ux5cux2520Turnoutux5cux2520atux5cux2520theux5cux2520cityux5cux2520andux5cux2520municipalux5cux2520councilux5cux2520electionsux5cux2520sinceux5cux25202006ux2cux5cux2520byux5cux2520cityux5cux2520district.}{Data
+set 1}} and
+\emph{\protect\hyperlink{Dataux5cux2520setux5cux25202:ux5cux2520Municipalux5cux2520electionsux5cux2520voteux5cux2520shareux2cux5cux2520byux5cux2520partyux5cux2520andux5cux2520electoralux5cux2520districtux5cux2520sinceux5cux25201913.}{Data
+set 2}}: The name of the districts corresponds to the prefix
+\emph{``Kreis''} followed by \emph{" + "} and the corresponding number.
+In the case of the \emph{wealth} and \emph{income} data frames, those
+values have to be transformed and combined as the following
+correspondence tables shows:
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Correspondence table between district names and district
+numbers}\tabularnewline
+\toprule
+Number & Name\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Number & Name\tabularnewline
+\midrule
+\endhead
+1 & Kreis 1 + 2\tabularnewline
+2 & Kreis 1 + 2\tabularnewline
+3 & Kreis 3\tabularnewline
+4 & Kreis 4 + 5\tabularnewline
+5 & Kreis 4 + 5\tabularnewline
+6 & Kreis 6\tabularnewline
+7 & Kreis 7 + 8\tabularnewline
+8 & Kreis 7 + 8\tabularnewline
+9 & Kreis 9\tabularnewline
+10 & Kreis 10\tabularnewline
+11 & Kreis 11\tabularnewline
+12 & Kreis 12\tabularnewline
+\bottomrule
+\end{longtable}
+
+Thereafter, several transformations have to be done as follows in order
+to transform the data into a mergable format:\\
+- Pivot to a longer format the tables and combine the tax values\\
+- Group by year, district name and tax type\\
+- Sum the values amount all categories within one district\\
+- Pivot to wide format again to averaged values
+
+After the step-by-step implementation of those transformation steps one
+gets the following data frame:
+
+\begin{longtable}[]{@{}rlrr@{}}
+\caption{Final wealth and income data frame per district and
+year}\tabularnewline
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endhead
+1999 & Kreis 1 + 2 & 314.70 & 424.5\tabularnewline
+1999 & Kreis 3 & 124.75 & 76.0\tabularnewline
+1999 & Kreis 4 + 5 & 228.10 & 37.0\tabularnewline
+1999 & Kreis 6 & 146.00 & 200.0\tabularnewline
+1999 & Kreis 7 + 8 & 337.55 & 636.5\tabularnewline
+1999 & Kreis 9 & 127.15 & 108.0\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{education-data}{%
+\subsection{Education data}\label{education-data}}
+
+The following data set contains 39x5 variables on type of education and
+year of the complete city of Zürich. This data set allows us to try to
+infer the change in education per type in the city of Zürich and
+interpolate the change of education type on a district respectively on a
+neighborhood level.
+
+\begin{longtable}[]{@{}rlrrr@{}}
+\caption{Original data set: Education distribution per category and
+year}\tabularnewline
+\toprule
+Jahr & Bildungsstand & AntBev & untAntBevKI & obAntBevKI\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Jahr & Bildungsstand & AntBev & untAntBevKI & obAntBevKI\tabularnewline
+\midrule
+\endhead
+1970 & Obligatorische Schule & 32.0 & NA & NA\tabularnewline
+1970 & Sekundarstufe II & 58.4 & NA & NA\tabularnewline
+1970 & Tertiärstufe & 9.7 & NA & NA\tabularnewline
+1980 & Obligatorische Schule & 33.9 & NA & NA\tabularnewline
+1980 & Sekundarstufe II & 52.5 & NA & NA\tabularnewline
+1980 & Tertiärstufe & 13.6 & NA & NA\tabularnewline
+\bottomrule
+\end{longtable}
+
+The following graphs shows the change of education in the city of Zürich
+between the year 1970 and 2018.
+
+\includegraphics{report_files/figure-latex/plot_education-1.pdf}
+
+The previous graph shows, that the number of inhabitants without an
+academical degree is decreasing in the course of time since 1970 in the
+City of Zürich, while the number of persons having a university degree
+is increasing. First, the values of the previous data frame have to be
+re-arranged using the \emph{pivot\_wide()} and the names of the
+education type are renamed to match the correspondence table
+
+\begin{longtable}[]{@{}rrrrr@{}}
+\caption{Pivoted data set: Education distribution per category and
+year}\tabularnewline
+\toprule
+Year & PrimarySchool & SecondarySchool & AcademiaDegree &
+DeltaYear\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & PrimarySchool & SecondarySchool & AcademiaDegree &
+DeltaYear\tabularnewline
+\midrule
+\endhead
+1970 & 32.0 & 58.4 & 9.7 & 0\tabularnewline
+1980 & 33.9 & 52.5 & 13.6 & 10\tabularnewline
+1990 & 31.2 & 53.5 & 15.3 & 20\tabularnewline
+2000 & 27.9 & 45.9 & 26.2 & 30\tabularnewline
+2010 & 21.1 & 39.6 & 39.4 & 40\tabularnewline
+2011 & 20.4 & 38.4 & 41.2 & 41\tabularnewline
+\bottomrule
+\end{longtable}
+
+In order to be able to reproduce this phenomena in the previous data
+set, the parameters of theses changes is going to calculated using the
+\emph{lm()} function. The used formula is the following:
+
+\[N_{AntBev} = c + \frac{\Delta d_{i}}{\Delta t} \cdot t \]
+
+Applying the previous showed formula to the other data set one gets the
+following values
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Coefficients of the linear model depending on the education
+type}\tabularnewline
+\toprule
+& PrimarySchool & SecondarySchool & AcademiaDegree\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+& PrimarySchool & SecondarySchool & AcademiaDegree\tabularnewline
+\midrule
+\endhead
+(Intercept) & 36.0127064 & 60.240920 & 3.7915859\tabularnewline
+DeltaYear & -0.3777745 & -0.552921 & 0.9300644\tabularnewline
+\bottomrule
+\end{longtable}
+
+The previous table shows the coefficients of the linear model of each
+education type. Before further transformation, we load a further data
+frame. The data set of dimensions 138x6 variables reflects how the
+education of the inhabitants changed over time per district and per
+education class. The following table shows the proportion of education
+per districts of the city of Zürich for the year 2021. The data set is
+updated on a yearly basis.
+
+\begin{longtable}[]{@{}lllrrr@{}}
+\caption{Original data set: Education distribution per category and
+district for the year 2021}\tabularnewline
+\toprule
+RaumSort & RaumLang & Bildungsstand & AntBev & untAntBevKI &
+obAntBevKI\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+RaumSort & RaumLang & Bildungsstand & AntBev & untAntBevKI &
+obAntBevKI\tabularnewline
+\midrule
+\endhead
+10 & Kreis 1 & 1 & 9.8 & 6.7 & 12.9\tabularnewline
+10 & Kreis 1 & 2 & 26.8 & 22.2 & 31.4\tabularnewline
+10 & Kreis 1 & 3 & 63.4 & 58.4 & 68.4\tabularnewline
+11 & Rathaus & 1 & 9.9 & 5.9 & 13.9\tabularnewline
+11 & Rathaus & 2 & 27.7 & 21.8 & 33.6\tabularnewline
+11 & Rathaus & 3 & 62.3 & 55.9 & 68.7\tabularnewline
+\bottomrule
+\end{longtable}
+
+The column \emph{``RaumSort''} encodes the district number and
+corresponding neighborhood within the district. The last digit describes
+the neighborhood and the first one (or two) digit the district number.
+The column \emph{``RaumLang''} describes the district and neighborhood
+name and the column \emph{``Bildungsstand''} describes the type of
+education as follows:
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Education ecoding: Education number key vs.~meaning in
+words}\tabularnewline
+\toprule
+EducationNumber & Meaning\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+EducationNumber & Meaning\tabularnewline
+\midrule
+\endhead
+1 & Primary school\tabularnewline
+2 & Secondary school\tabularnewline
+3 & Academia degree\tabularnewline
+\bottomrule
+\end{longtable}
+
+Where type \emph{1} describes the nine complete year of the mandatory
+school program, \emph{2} describes either a professional degree or
+high-school diploma and \emph{3} an academical degree (Bachelor's degree
+and higher). The columns \emph{``untAntBevKI''} and
+\emph{``obAntBevKI''} describes the lower and upper portion of the
+confidence interval of the values per education. Summarzing, the data
+frame is going to be updated as follows:\\
+- \emph{``Bildungsstand''} is update with the meaning as described in
+the previous table\\
+- Columns \emph{``untAntBevKI''} and \emph{``obAntBevKI''} are droped\\
+- Column \emph{``Year''} is added with value \emph{2021}\\
+- Column \emph{``RaumSort''} is transformed to column
+\emph{``DistrictNumer''}\\
+- District designation adapted\\
+- District summarized according to voting data frames
+
+Those transformations steps leads to the following data frame:
+
+\begin{longtable}[]{@{}rlrrr@{}}
+\caption{Transformed data frame for education in year
+2021}\tabularnewline
+\toprule
+Year & DistrictName & PrimarySchool & SecondarySchool &
+AcademiaDegree\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & PrimarySchool & SecondarySchool &
+AcademiaDegree\tabularnewline
+\midrule
+\endhead
+2021 & Kreis 1 + 2 & 12.5 & 29.7 & 57.8\tabularnewline
+2021 & Kreis 10 & 12.4 & 33.7 & 54.0\tabularnewline
+2021 & Kreis 11 & 20.3 & 35.5 & 44.2\tabularnewline
+2021 & Kreis 12 & 29.2 & 39.6 & 31.1\tabularnewline
+2021 & Kreis 3 & 17.2 & 31.6 & 51.2\tabularnewline
+2021 & Kreis 4 + 5 & 13.9 & 26.9 & 59.3\tabularnewline
+2021 & Kreis 6 & 10.0 & 25.4 & 64.6\tabularnewline
+2021 & Kreis 7 + 8 & 8.4 & 26.4 & 65.2\tabularnewline
+2021 & Kreis 9 & 20.0 & 38.6 & 41.5\tabularnewline
+\bottomrule
+\end{longtable}
+
+The previous table shows the transformed data for the year 2021. Now,
+taking into account the previously calculated
+\emph{\href{tab:pivot_education1}{lm coefficients}} one can extrapolate
+values for the missing years of the data frame.
 
 \pagebreak
 

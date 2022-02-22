@@ -41,6 +41,7 @@ library(stringr)
 #toc_depth: 4
 ```
 
+
 # Introduction 
 
 ## Project goal
@@ -65,8 +66,8 @@ The data sets did not have the same content and were not organised in the same w
 The data set of dimensions 136x7 reflects how many people from each city district participated in the last five elections (2006-2018). 
 
 ```{r Beteiligung_am_Urnengang 1, echo=FALSE, results='asis', include = TRUE}
-d.gen <- read.table("https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_btg_urnengang_quartier_od7005/download/POL700OD7005.csv", header = TRUE, sep = ",")
-#d.gen <- read.table("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp/Beteiligung__nachStadtquartier.csv", header = TRUE, sep = ",")
+#d.gen <- read.table("https://data.stadt-zuerich.ch/dataset/politik_gemeinderatswahlen_btg_urnengang_quartier_od7005/download/POL700OD7005.csv", header = TRUE, sep = ",")
+d.gen <- read.table("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp/Beteiligung__nachStadtquartier.csv", header = TRUE, sep = ",")
 kable(d.gen[1:6, ], caption = "Original data set: Turnout in the city and municipal council elections since 2006, by city district")
 
 ```
@@ -293,7 +294,7 @@ VermoegenSteuerKreis$KreisSort <- VermoegenSteuerKreis$KreisSort %>% as.factor()
 
 VermoegenSteuerKreis <- VermoegenSteuerKreis[,! names(VermoegenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang","SteuerVermoegen_p25","SteuerVermoegen_p75")]
 VermoegenSteuerKreis <- VermoegenSteuerKreis %>%
-  rename(
+  dplyr::rename(
     DistrictNumber = KreisSort,
     Year = SteuerJahr,
     Wealth = SteuerVermoegen_p50,
@@ -360,7 +361,7 @@ EinkommenSteuerKreis$KreisSort <- EinkommenSteuerKreis$KreisSort %>% as.factor()
 
 EinkommenSteuerKreis <- EinkommenSteuerKreis[,! names(EinkommenSteuerKreis) %in% c("KreisLang", "SteuerTarifLang","SteuerEinkommen_p25","SteuerEinkommen_p75")]
 EinkommenSteuerKreis <- EinkommenSteuerKreis %>%
-  rename(
+  dplyr::rename(
     DistrictNumber = KreisSort,
     Year = SteuerJahr,
     Income = SteuerEinkommen_p50,
@@ -438,7 +439,7 @@ EducationYearPivot <- EducationYear %>%
   pivot_wider(names_from = Bildungsstand,
               values_from = AntBev,
               values_fill = 0) %>%
-  rename('Year' = 'Jahr') %>%
+  dplyr::rename('Year' = 'Jahr') %>%
   mutate(DeltaYear = Year - 1970)
 
 kable(EducationYearPivot %>% head(), caption = "Pivoted data set: Education distribution per category and year")
@@ -524,7 +525,7 @@ EducationDistrictPivot <- EducationDistrict %>%
     '10' = "Kreis 10",
     '11' = "Kreis 11", 
     '12' = "Kreis 12")) %>%
-  rename(DistrictName = DistrictNumber) %>%
+  dplyr::rename(DistrictName = DistrictNumber) %>%
   group_by(DistrictName) %>%
   summarise_at(c("PrimarySchool","SecondarySchool","AcademiaDegree"), ~round(mean(.),1)) %>%
   mutate(Year = 2021) %>%
@@ -538,7 +539,7 @@ The previous table shows the transformed data for the year 2021. Now, taking int
 \pagebreak
 # Merging Data
 ## Combine wealth and income data  
-The aim of this part is to combine the income and wealth data into one data frame. As a first step, both data frames are combine using the _merge()_ function. The merged data sets of income and wealth data, contains the income data and wealth data per district and tax category combined. 
+The aim of this part is to combine all data sets into one. As a first step, data frames 3 and 4 are combine using the _merge()_ function. The merged data sets of income and wealth data, contains the income data and wealth data per district and tax category combined. 
 
 ```{r merging_income_wealth, echo = FALSE, include = TRUE}
 # Merge the two frames and drop redundant column KreisLang
@@ -573,7 +574,7 @@ Thereafter, several transformations have to be done as follows in order to trans
 - Sum the values amount all categories within one district  
 - Pivot to wide format again to averaged values  
 
-After the step-by-step implementation of those transformation steps one gets the following data frame: 
+After the step-by-step implementation of the transformation steps one gets the following data frame: 
 
 ```{r transformations_wealth_income, echo = FALSE, include = TRUE}
 # Transformations
@@ -613,8 +614,8 @@ kable(df_final[1:6,1:4], caption = "Final dataset")
 kable(df_final[1:6,5:13])
 ```
  
-\pagebreak
 
+\pagebreak
 # Chapter of choice - Maps with ggplot and sf
 As a chapter of choice, we have explored creation of maps in ggplot and sf. 
 
@@ -623,9 +624,8 @@ library(ggplot2)
 library(sf)
 library(osmdata)
 library(ggmap)
-#Load files with map information
-#zh <- st_read("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp/map_data/stzh.adm_zaehlkreise_a.shp") 
-zh <- st_read("./data/map_data/stzh.adm_zaehlkreise_a.shp") 
+## Load files with map information
+zh <- st_read("/Users/leonidgavrilyuk/Desktop/R_Bootcamp/RBootcamp/map_data/stzh.adm_zaehlkreise_a.shp") 
 zh <- zh %>%
   dplyr::mutate(bezeichnun = recode(bezeichnun, 
                              "3" = "Kreis 3", 

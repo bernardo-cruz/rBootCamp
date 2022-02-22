@@ -79,7 +79,7 @@
   \href{mailto:leonid.gavrilyuk@stud.hslu.ch}{\nolinkurl{leonid.gavrilyuk@stud.hslu.ch}}} \and Bernardo
 Freire Barboza da Cruz\footnote{Hochschule Luzern,
   \href{mailto:bernardo.dacruz@stud.hslu.ch}{\nolinkurl{bernardo.dacruz@stud.hslu.ch}}}}
-\date{21 February, 2022}
+\date{22 February, 2022}
 
 \begin{document}
 \maketitle
@@ -90,45 +90,50 @@ Freire Barboza da Cruz\footnote{Hochschule Luzern,
 \tableofcontents
 \pagebreak
 
-\hypertarget{introduction.}{%
-\section{Introduction.}\label{introduction.}}
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
 
 \hypertarget{project-goal}{%
 \subsection{Project goal}\label{project-goal}}
 
 The goal is to understand the dynamics in the performance of each part
-in each electoral district of the city. The time span in interest is
-\textbf{2006-2018 ???} The questions to be answered: the portrait of the
-voters, identification of relationship (if any) between such
-characteristics as voters' education or age and the election results of
-the party.
+in each electoral district of the city. The period of interest is
+2006-2018. The questions to be answered: what is the dynamic of the
+voting behaviour in each electoral district, overview of the city
+elections, identification of relationship (if any) between such
+characteristics as voters' education and the election results of the
+party.
 
 \hypertarget{data}{%
 \subsection{Data}\label{data}}
 
-To perform analysis, six data sets covering the time period 2006-2022
+To perform analysis, six data sets covering the time period 2006-2018
 were retrieved from the Open Data platform of the City of Zürich:
 
 \begin{itemize}
 \tightlist
 \item
   Turnout at the city and municipal council elections, by city district,
-  since 2006. (\emph{Beteiligung am Urnengang der Stadt- und
-  Gemeinderatswahlen nach Stadtquartier})
+  since 2006.
 \item
   Municipal elections vote share, by party and electoral district, since
-  1913. (\emph{Gemeinderatswahlen Stimmenanteil nach Partei und
-  Wahlkreis})
+  1913.
 \item
   Turnout at the city and municipal council elections, by age and
-  gender, since 2006. ?? ??
+  gender, since 2006.
+\item
+  Wealth distribution of the population in Zürich, by district, since
+  1999.
+\item
+  Income distribution of the population in Zürich, by district, since
+  1999.
 \end{itemize}
 
 The data sets did not have the same content and were not organised in
 the same way. Each data set contained some irrelevant information - for
 example, historical election data since 1913 whereas the time span of
 interest is 2006-2018. This required data preparation activities. Each
-data set was prepared, subsequently all of them were merged into one
+data set was prepared, subsequently, all of them were merged into one
 final table.
 
 \pagebreak
@@ -142,7 +147,7 @@ elections since 2006, by city
 district.}\label{data-set-1-turnout-at-the-city-and-municipal-council-elections-since-2006-by-city-district.}}
 
 The data set of dimensions 136x7 reflects how many people from each city
-district participated in five last elections (2006-2022).
+district participated in the last five elections (2006-2018).
 
 \begin{longtable}[]{@{}rrlrrrr@{}}
 \caption{Original data set: Turnout in the city and municipal council
@@ -188,20 +193,18 @@ To address the issue, the following manipulations were performed:
   in the created column ``DistrictName''.
 \item
   Rename the electoral districts to reflect the fact that some city
-  districts are merged for the elections - for example ``Kreis 1'' and
+  districts are merged for the elections - for example, ``Kreis 1'' and
   ``Kreis 2'' became ``Kreis 1+2''. This was done with the \textbf{dplyr
   mutate() function}.
+\item
+  Assigning levels to the DistrictNamecolumn to prevent ordering
+  alphabetically: Kreis 1+2 is now followed by Kreis 3, and not Kreis
+  10.
 \item
   Calculate the mean values for each group and year using \textbf{dplyr
   group\_by() and summarise() functions} (saved as a separate data
   frame). The results is saved as a separate data frame, with the new
   column ``PercentageOfDistrict''.
-\item
-  Calculate percentage of each district's voters relative to the total
-  number of the city voters using \textbf{dplyr group\_by()
-  \%\textgreater\% summarise() \%\textgreater\% transmute() functions}.
-  The results is saved as a separate data frame, with the new column
-  ``PercentageOfCity''.
 \item
   Merge the dataframes with the \textbf{dplyr inner\_join()}.
 \item
@@ -209,24 +212,22 @@ To address the issue, the following manipulations were performed:
   \textbf{as.factor()}
 \end{itemize}
 
-\begin{longtable}[]{@{}llrr@{}}
+\begin{longtable}[]{@{}llr@{}}
 \caption{Final dataset: Turnout by electoral district}\tabularnewline
 \toprule
-Jahr & DistrictName & PercentageOfDistrict &
-PercentageOfCity\tabularnewline
+Year & DistrictName & PercentageOfDistrict\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Jahr & DistrictName & PercentageOfDistrict &
-PercentageOfCity\tabularnewline
+Year & DistrictName & PercentageOfDistrict\tabularnewline
 \midrule
 \endhead
-2006 & Kreis 1+2 & 34.95714 & 11.436022\tabularnewline
-2006 & Kreis 10 & 38.25000 & 12.176240\tabularnewline
-2006 & Kreis 11 & 31.80000 & 13.336140\tabularnewline
-2006 & Kreis 12 & 29.56667 & 5.654176\tabularnewline
-2006 & Kreis 3 & 33.20000 & 11.112771\tabularnewline
-2006 & Kreis 4+5 & 28.20000 & 7.482310\tabularnewline
+2018 & Kreis 1 + 2 & 55.46\tabularnewline
+2018 & Kreis 3 & 58.23\tabularnewline
+2018 & Kreis 4 + 5 & 58.24\tabularnewline
+2018 & Kreis 6 & 66.55\tabularnewline
+2018 & Kreis 7 + 8 & 65.16\tabularnewline
+2018 & Kreis 9 & 54.20\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -236,7 +237,7 @@ their right to vote. Kreis 6 has the highest percentage of active
 citizens, followed by Kreis 7+8 and Kreis 10. Residents of Kreis 12 are
 the least interested in the elections people in Zürich. However, when it
 comes to the percentage of all city voters, Kreis 12 contributes the
-third largest portion of votes. This means, politicians should mobilize
+third largest portion of votes. This means politicians should mobilize
 residents of this district to gain votes on the city and national level
 elections. Other important districts are Kreis 7+8 (gives most votes)
 and Kreis 11 (second place).
@@ -302,11 +303,14 @@ The following manipulations were performed:
   Transform the table into wide format with the \textbf{tidyverse
   pivot\_wider() function}.
 \item
+  Change ``Year'' and ``DistrictName'' variables to factors. Visualise
+  with the \textbf{tidyverse gather() method and ggplot}
+\item
   Merge the set with the first table ``Turnout by electoral district''
-  (see part 2.1.)
+  (see part 2.1.) using \textbf{inner\_join}.
 \end{itemize}
 
-\begin{longtable}[]{@{}rlrrrrrrrr@{}}
+\begin{longtable}[]{@{}llrrrrrrrr@{}}
 \caption{Final dataset: Municipal elections vote share, by party and
 electoral district, 2006-2018.}\tabularnewline
 \toprule
@@ -338,7 +342,52 @@ AL & EVP\tabularnewline
 \bottomrule
 \end{longtable}
 
-The analysis shows that
+The visualisation shows that parties have been demonstrating roughly the
+same result since 2006. Kreis 7+8 seems to be the bastion of FDP. Most
+active supporters of AL-Alternative Liste live in Kreis 4+5. Electoral
+districts Kreis 3, Kreis 4+5, Kreis 6 and Kreis 10 deliver a larger
+amount of votes to SP than the citizens of other districts. Voters in
+Kreis 7+8 do not like to vote for socialists. A curious phenomenon can
+be observed when it comes to the green parties - GLP and GPS. They seem
+to grow at expense of other parties: FDP and SP, respectively.
+
+\includegraphics{report_files/figure-latex/plot Parties in Districts-1.pdf}
+
+The data set was merged with the Dataset 1:
+
+\begin{longtable}[]{@{}llrrrrrrrrr@{}}
+\caption{Merged dataset: Municipal elections turnout and vote share by
+party, 2006-2018.}\tabularnewline
+\toprule
+Year & DistrictName & PercentageOfDistrict & SP & BGB/SVP & FDP & GPS &
+GLP & CVP/Die Mitte & AL & EVP\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & PercentageOfDistrict & SP & BGB/SVP & FDP & GPS &
+GLP & CVP/Die Mitte & AL & EVP\tabularnewline
+\midrule
+\endhead
+2018 & Kreis 1 + 2 & 55.46 & 30.8 & 13.1 & 19.8 & 12.4 & 10.4 & 4.3 &
+6.3 & 1.5\tabularnewline
+2018 & Kreis 3 & 58.23 & 35.8 & 10.3 & 10.9 & 14.1 & 10.4 & 3.2 & 12.1 &
+1.6\tabularnewline
+2018 & Kreis 4 + 5 & 58.24 & 36.3 & 6.1 & 10.2 & 14.3 & 12.1 & 1.8 &
+16.3 & 0.9\tabularnewline
+2018 & Kreis 6 & 66.55 & 34.9 & 9.1 & 17.2 & 12.8 & 11.8 & 3.2 & 7.8 &
+2.1\tabularnewline
+2018 & Kreis 7 + 8 & 65.16 & 27.4 & 10.8 & 26.7 & 12.1 & 10.9 & 4.5 &
+5.3 & 2.2\tabularnewline
+2018 & Kreis 9 & 54.20 & 31.9 & 17.9 & 14.2 & 10.8 & 8.7 & 4.9 & 5.4 &
+5.2\tabularnewline
+2018 & Kreis 10 & 64.20 & 36.2 & 12.3 & 16.0 & 10.8 & 10.1 & 2.8 & 8.3 &
+2.3\tabularnewline
+2018 & Kreis 11 & 51.07 & 31.2 & 19.2 & 14.0 & 10.0 & 11.1 & 3.9 & 4.3 &
+4.8\tabularnewline
+\bottomrule
+\end{longtable}
+
+\pagebreak
 
 \hypertarget{data-set-3-wealth-distribution-of-the-population-in-zuxfcrich-by-district}{%
 \subsection{Data set 3: Wealth distribution of the population in Zürich,
@@ -664,102 +713,6 @@ categories the lowest values of accumulated as well.
 
 \newpage
 
-\hypertarget{combine-wealth-and-income-data}{%
-\subsection{Combine wealth and income
-data}\label{combine-wealth-and-income-data}}
-
-The aim of this part is to combine the income and wealth data into one
-data frame. As a first step, both data frames are combine using the
-\emph{merge()} function. The merged data sets of income and wealth data,
-contains the income data and wealth data per district and tax category
-combined.
-
-\begin{longtable}[]{@{}rllrr@{}}
-\caption{Merged income and wealth data}\tabularnewline
-\toprule
-Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
-\midrule
-\endhead
-1999 & 1 & 0 & 37.8 & 23.0\tabularnewline
-1999 & 1 & 1 & 83.4 & 182.0\tabularnewline
-1999 & 1 & 2 & 46.7 & 27.5\tabularnewline
-1999 & 10 & 0 & 38.5 & 34.0\tabularnewline
-1999 & 10 & 1 & 69.0 & 124.0\tabularnewline
-1999 & 10 & 2 & 37.7 & 11.0\tabularnewline
-\bottomrule
-\end{longtable}
-
-Thereafter, the district name has to be modified in order to match if
-the data presented in sections concerning
-\emph{\protect\hyperlink{Dataux5cux2520setux5cux25201:ux5cux2520Turnoutux5cux2520atux5cux2520theux5cux2520cityux5cux2520andux5cux2520municipalux5cux2520councilux5cux2520electionsux5cux2520sinceux5cux25202006ux2cux5cux2520byux5cux2520cityux5cux2520district.}{Data
-set 1}} and
-\emph{\protect\hyperlink{Dataux5cux2520setux5cux25202:ux5cux2520Municipalux5cux2520electionsux5cux2520voteux5cux2520shareux2cux5cux2520byux5cux2520partyux5cux2520andux5cux2520electoralux5cux2520districtux5cux2520sinceux5cux25201913.}{Data
-set 2}}: The name of the districts corresponds to the prefix
-\emph{``Kreis''} followed by \emph{" + "} and the corresponding number.
-In the case of the \emph{wealth} and \emph{income} data frames, those
-values have to be transformed and combined as the following
-correspondence tables shows:
-
-\begin{longtable}[]{@{}ll@{}}
-\caption{Correspondence table between district names and district
-numbers}\tabularnewline
-\toprule
-Number & Name\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Number & Name\tabularnewline
-\midrule
-\endhead
-1 & Kreis 1 + 2\tabularnewline
-2 & Kreis 1 + 2\tabularnewline
-3 & Kreis 3\tabularnewline
-4 & Kreis 4 + 5\tabularnewline
-5 & Kreis 4 + 5\tabularnewline
-6 & Kreis 6\tabularnewline
-7 & Kreis 7 + 8\tabularnewline
-8 & Kreis 7 + 8\tabularnewline
-9 & Kreis 9\tabularnewline
-10 & Kreis 10\tabularnewline
-11 & Kreis 11\tabularnewline
-12 & Kreis 12\tabularnewline
-\bottomrule
-\end{longtable}
-
-Thereafter, several transformations have to be done as follows in order
-to transform the data into a mergable format:\\
-- Pivot to a longer format the tables and combine the tax values\\
-- Group by year, district name and tax type\\
-- Sum the values amount all categories within one district\\
-- Pivot to wide format again to averaged values
-
-After the step-by-step implementation of those transformation steps one
-gets the following data frame:
-
-\begin{longtable}[]{@{}rlrr@{}}
-\caption{Final wealth and income data frame per district and
-year}\tabularnewline
-\toprule
-Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
-\midrule
-\endhead
-1999 & Kreis 1 + 2 & 314.70 & 424.5\tabularnewline
-1999 & Kreis 3 & 124.75 & 76.0\tabularnewline
-1999 & Kreis 4 + 5 & 228.10 & 37.0\tabularnewline
-1999 & Kreis 6 & 146.00 & 200.0\tabularnewline
-1999 & Kreis 7 + 8 & 337.55 & 636.5\tabularnewline
-1999 & Kreis 9 & 127.15 & 108.0\tabularnewline
-\bottomrule
-\end{longtable}
-
 \hypertarget{education-data}{%
 \subsection{Education data}\label{education-data}}
 
@@ -955,6 +908,276 @@ values for the missing years of the data frame.
 \hypertarget{merging-data}{%
 \section{Merging Data}\label{merging-data}}
 
+\hypertarget{combine-wealth-and-income-data}{%
+\subsection{Combine wealth and income
+data}\label{combine-wealth-and-income-data}}
+
+The aim of this part is to combine the income and wealth data into one
+data frame. As a first step, both data frames are combine using the
+\emph{merge()} function. The merged data sets of income and wealth data,
+contains the income data and wealth data per district and tax category
+combined.
+
+\begin{longtable}[]{@{}rllrr@{}}
+\caption{Merged income and wealth data}\tabularnewline
+\toprule
+Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictNumber & TaxCategory & Income & Wealth\tabularnewline
+\midrule
+\endhead
+1999 & 1 & 0 & 37.8 & 23.0\tabularnewline
+1999 & 1 & 1 & 83.4 & 182.0\tabularnewline
+1999 & 1 & 2 & 46.7 & 27.5\tabularnewline
+1999 & 10 & 0 & 38.5 & 34.0\tabularnewline
+1999 & 10 & 1 & 69.0 & 124.0\tabularnewline
+1999 & 10 & 2 & 37.7 & 11.0\tabularnewline
+\bottomrule
+\end{longtable}
+
+Thereafter, the district name has to be modified in order to match if
+the data presented in sections concerning
+\emph{\protect\hyperlink{Dataux5cux2520setux5cux25201:ux5cux2520Turnoutux5cux2520atux5cux2520theux5cux2520cityux5cux2520andux5cux2520municipalux5cux2520councilux5cux2520electionsux5cux2520sinceux5cux25202006ux2cux5cux2520byux5cux2520cityux5cux2520district.}{Data
+set 1}} and
+\emph{\protect\hyperlink{Dataux5cux2520setux5cux25202:ux5cux2520Municipalux5cux2520electionsux5cux2520voteux5cux2520shareux2cux5cux2520byux5cux2520partyux5cux2520andux5cux2520electoralux5cux2520districtux5cux2520sinceux5cux25201913.}{Data
+set 2}}: The name of the districts corresponds to the prefix
+\emph{``Kreis''} followed by \emph{" + "} and the corresponding number.
+In the case of the \emph{wealth} and \emph{income} data frames, those
+values have to be transformed and combined as the following
+correspondence tables shows:
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Correspondence table between district names and district
+numbers}\tabularnewline
+\toprule
+Number & Name\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Number & Name\tabularnewline
+\midrule
+\endhead
+1 & Kreis 1 + 2\tabularnewline
+2 & Kreis 1 + 2\tabularnewline
+3 & Kreis 3\tabularnewline
+4 & Kreis 4 + 5\tabularnewline
+5 & Kreis 4 + 5\tabularnewline
+6 & Kreis 6\tabularnewline
+7 & Kreis 7 + 8\tabularnewline
+8 & Kreis 7 + 8\tabularnewline
+9 & Kreis 9\tabularnewline
+10 & Kreis 10\tabularnewline
+11 & Kreis 11\tabularnewline
+12 & Kreis 12\tabularnewline
+\bottomrule
+\end{longtable}
+
+Thereafter, several transformations have to be done as follows in order
+to transform the data into a mergable format:\\
+- Pivot to a longer format the tables and combine the tax values\\
+- Group by year, district name and tax type\\
+- Sum the values amount all categories within one district\\
+- Pivot to wide format again to averaged values
+
+After the step-by-step implementation of those transformation steps one
+gets the following data frame:
+
+\begin{longtable}[]{@{}rlrr@{}}
+\caption{Final wealth and income data frame per district and
+year}\tabularnewline
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endhead
+1999 & Kreis 1 + 2 & 314.70 & 424.5\tabularnewline
+1999 & Kreis 3 & 124.75 & 76.0\tabularnewline
+1999 & Kreis 4 + 5 & 228.10 & 37.0\tabularnewline
+1999 & Kreis 6 & 146.00 & 200.0\tabularnewline
+1999 & Kreis 7 + 8 & 337.55 & 636.5\tabularnewline
+1999 & Kreis 9 & 127.15 & 108.0\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{merge-all-data-sets}{%
+\subsection{Merge all data sets}\label{merge-all-data-sets}}
+
+Finally, all data sets are combined into one:
+
+\begin{longtable}[]{@{}llrr@{}}
+\caption{Final dataset}\tabularnewline
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Year & DistrictName & SumTaxIncome & SumTaxWealth\tabularnewline
+\midrule
+\endhead
+2006 & Kreis 1 + 2 & 352.45 & 561.0\tabularnewline
+2006 & Kreis 3 & 132.95 & 76.0\tabularnewline
+2006 & Kreis 4 + 5 & 249.65 & 61.0\tabularnewline
+2006 & Kreis 6 & 166.10 & 243.0\tabularnewline
+2006 & Kreis 7 + 8 & 397.45 & 788.5\tabularnewline
+2006 & Kreis 9 & 132.30 & 85.5\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}rrrrrrrrr@{}}
+\toprule
+PercentageOfDistrict & SP & BGB/SVP & FDP & GPS & GLP & CVP/Die Mitte &
+AL & EVP\tabularnewline
+\midrule
+\endhead
+34.96 & 30.1 & 16.2 & 23.1 & 13.1 & 2.4 & 7.7 & 2.5 & 3.0\tabularnewline
+33.20 & 37.5 & 18.2 & 8.6 & 14.3 & 2.3 & 7.1 & 6.1 & 2.3\tabularnewline
+28.20 & 38.9 & 11.9 & 6.6 & 14.9 & 4.2 & 6.0 & 13.3 & 1.5\tabularnewline
+40.75 & 35.9 & 14.4 & 16.3 & 12.6 & 3.9 & 6.6 & 3.4 & 5.1\tabularnewline
+39.51 & 29.8 & 13.5 & 24.8 & 12.3 & 3.7 & 6.9 & 2.6 & 5.1\tabularnewline
+33.05 & 33.0 & 24.8 & 9.5 & 7.2 & 2.4 & 8.9 & 1.9 & 7.7\tabularnewline
+\bottomrule
+\end{longtable}
+
+\pagebreak
+
+\hypertarget{chapter-of-choice---maps-with-ggplot-and-sf}{%
+\section{Chapter of choice - Maps with ggplot and
+sf}\label{chapter-of-choice---maps-with-ggplot-and-sf}}
+
+As a chapter of choice, we have explored creation of maps in ggplot and
+sf.
+
+\hypertarget{r-maps-1-echofalse-includefalse}{%
+\section{```\{r Maps 1, echo=FALSE,
+include=FALSE\}}\label{r-maps-1-echofalse-includefalse}}
+
+\hypertarget{libraryggplot2}{%
+\section{library(ggplot2)}\label{libraryggplot2}}
+
+\hypertarget{librarysf}{%
+\section{library(sf)}\label{librarysf}}
+
+\hypertarget{libraryosmdata}{%
+\section{library(osmdata)}\label{libraryosmdata}}
+
+\hypertarget{libraryggmap}{%
+\section{library(ggmap)}\label{libraryggmap}}
+
+\hypertarget{load-files-with-map-information}{%
+\section{\#\# Load files with map
+information}\label{load-files-with-map-information}}
+
+\hypertarget{zh---st_readusersleonidgavrilyukdesktopr_bootcamprbootcampmap_datastzh.adm_zaehlkreise_a.shp}{%
+\section{\#zh \textless-
+st\_read(``/Users/leonidgavrilyuk/Desktop/R\_Bootcamp/RBootcamp/map\_data/stzh.adm\_zaehlkreise\_a.shp'')}\label{zh---st_readusersleonidgavrilyukdesktopr_bootcamprbootcampmap_datastzh.adm_zaehlkreise_a.shp}}
+
+\hypertarget{zh---st_readusersleonidgavrilyukdesktopr_bootcamprbootcampmap_datastzh.adm_zaehlkreise_a.shp-1}{%
+\section{zh \textless-
+st\_read(``/Users/leonidgavrilyuk/Desktop/R\_Bootcamp/RBootcamp/map\_data/stzh.adm\_zaehlkreise\_a.shp'')}\label{zh---st_readusersleonidgavrilyukdesktopr_bootcamprbootcampmap_datastzh.adm_zaehlkreise_a.shp-1}}
+
+\hypertarget{zh---zh}{%
+\section{zh \textless- zh \%\textgreater\%}\label{zh---zh}}
+
+\hypertarget{dplyrmutatebezeichnun-recodebezeichnun}{%
+\section{dplyr::mutate(bezeichnun =
+recode(bezeichnun,}\label{dplyrmutatebezeichnun-recodebezeichnun}}
+
+\hypertarget{kreis-3}{%
+\section{``3'' = ``Kreis 3'',}\label{kreis-3}}
+
+\hypertarget{kreis-6}{%
+\section{``6'' = ``Kreis 6'',}\label{kreis-6}}
+
+\hypertarget{kreis-910-kreis-10}{%
+\section{``9'' = ``Kreis 9'',``10'' = ``Kreis
+10'',}\label{kreis-910-kreis-10}}
+
+\hypertarget{kreis-11}{%
+\section{``11'' = ``Kreis 11'',}\label{kreis-11}}
+
+\hypertarget{kreis-12}{%
+\section{``12'' = ``Kreis 12'',}\label{kreis-12}}
+
+\hypertarget{und-2-kreis-1-2}{%
+\section{`1 und 2' = `Kreis 1 + 2',}\label{und-2-kreis-1-2}}
+
+\hypertarget{und-5-kreis-4-5}{%
+\section{`4 und 5' = `Kreis 4 + 5',}\label{und-5-kreis-4-5}}
+
+\hypertarget{und-8-kreis-7-8}{%
+\section{`7 und 8' =`Kreis 7 + 8'))}\label{und-8-kreis-7-8}}
+
+\hypertarget{zh---zh-1}{%
+\section{zh \textless- zh \%\textgreater\%}\label{zh---zh-1}}
+
+\hypertarget{mutatekuerzel-recodekuerzel}{%
+\section{mutate(kuerzel =
+recode(kuerzel,}\label{mutatekuerzel-recodekuerzel}}
+
+\hypertarget{und-2-12}{%
+\section{`1 und 2' = `1+2',}\label{und-2-12}}
+
+\hypertarget{und-5-45}{%
+\section{`4 und 5' = `4+5',}\label{und-5-45}}
+
+\hypertarget{und-8-78}{%
+\section{`7 und 8' =`7+8'))}\label{und-8-78}}
+
+\hypertarget{zhbezeichnun---factorzhbezeichnun-levels-ckreis-1-2kreis-3}{%
+\section{\texorpdfstring{zh\(bezeichnun <- factor(zh\)bezeichnun, levels
+= c(``Kreis 1 + 2'',``Kreis
+3'',}{zhbezeichnun \textless- factor(zhbezeichnun, levels = c(``Kreis 1 + 2'',``Kreis 3'',}}\label{zhbezeichnun---factorzhbezeichnun-levels-ckreis-1-2kreis-3}}
+
+\hypertarget{kreis-4-5-kreis-6}{%
+\section{``Kreis 4 + 5'', ``Kreis 6'',}\label{kreis-4-5-kreis-6}}
+
+\hypertarget{kreis-7-8-kreis-9}{%
+\section{`Kreis 7 + 8', ``Kreis 9'',}\label{kreis-7-8-kreis-9}}
+
+\hypertarget{kreis-10}{%
+\section{``Kreis 10'',}\label{kreis-10}}
+
+\hypertarget{kreis-11-kreis-12}{%
+\section{``Kreis 11'', ``Kreis 12'' ))}\label{kreis-11-kreis-12}}
+
+\hypertarget{zh---zhorderzhbezeichnun}{%
+\section{zh \textless-
+zh{[}order(zh\$bezeichnun),{]}}\label{zh---zhorderzhbezeichnun}}
+
+\hypertarget{zh---zh-2}{%
+\section{zh \textless- zh \%\textgreater\%}\label{zh---zh-2}}
+
+\hypertarget{dplyrrename}{%
+\section{dplyr::rename(}\label{dplyrrename}}
+
+\hypertarget{districtname-bezeichnun}{%
+\section{DistrictName = bezeichnun}\label{districtname-bezeichnun}}
+
+\hypertarget{section}{%
+\section{)}\label{section}}
+
+\hypertarget{results---df_finaldf_finalyear-in-c2018}{%
+\section{results \textless- df\_final{[}df\_final\$Year \%in\%
+c(``2018''), {]}}\label{results---df_finaldf_finalyear-in-c2018}}
+
+\hypertarget{zh---zh-dplyrinner_joinresults}{%
+\section{zh \textless- zh \%\textgreater\%
+dplyr::inner\_join(results)}\label{zh---zh-dplyrinner_joinresults}}
+
+\hypertarget{headzh-10}{%
+\section{head(zh, 10)}\label{headzh-10}}
+
+\hypertarget{section-1}{%
+\section{```}\label{section-1}}
+
+\hypertarget{r-plot-map-include-true-dimzh-ggplotdata-zh-geom_sfaesfill-sp-scale_fill_viridis_ctrans-sqrt-geom_sf_labelaeslabel-kuerzel-colour-white-geom_sf_textaeslabel-kuerzel-colour-black-size2familysans-labsfill-2018-sp-results}{%
+\section{\texorpdfstring{\texttt{\{r\ plot\ map,\ include\ =\ TRUE\}\ \#\ dim(zh)\ \#\ ggplot(data\ =\ zh)\ +\ \#\ \ \ geom\_sf(aes(fill\ =\ SP))\ +\ \#\ \ \ scale\_fill\_viridis\_c(trans\ =\ "sqrt")\ +\ \#\ \ \ geom\_sf\_label(aes(label\ =\ kuerzel),\ colour\ =\ "white")\ +\ \#\ \ \ geom\_sf\_text(aes(label\ =\ kuerzel),\ colour\ =\ "black",\ size=2,family="sans")\ +\ \#\ \ \ labs(fill\ =\ "2018\ SP\ results\ (\%)")\ \#\ \#}}{\{r plot map, include = TRUE\} \# dim(zh) \# ggplot(data = zh) + \#   geom\_sf(aes(fill = SP)) + \#   scale\_fill\_viridis\_c(trans = "sqrt") + \#   geom\_sf\_label(aes(label = kuerzel), colour = "white") + \#   geom\_sf\_text(aes(label = kuerzel), colour = "black", size=2,family="sans") + \#   labs(fill = "2018 SP results (\%)") \# \#}}\label{r-plot-map-include-true-dimzh-ggplotdata-zh-geom_sfaesfill-sp-scale_fill_viridis_ctrans-sqrt-geom_sf_labelaeslabel-kuerzel-colour-white-geom_sf_textaeslabel-kuerzel-colour-black-size2familysans-labsfill-2018-sp-results}}
+
 \pagebreak
 
 \hypertarget{data-visualization}{%
@@ -964,11 +1187,6 @@ values for the missing years of the data frame.
 
 \hypertarget{fit-model}{%
 \section{Fit Model}\label{fit-model}}
-
-\pagebreak
-
-\hypertarget{chapter-of-choice-tbd}{%
-\section{Chapter of Choice TBD}\label{chapter-of-choice-tbd}}
 
 \pagebreak
 
